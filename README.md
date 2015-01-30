@@ -1,2 +1,2 @@
 # Komodo
-EECS441 Winter2015 APP Design
+EECS 441 Winter2015 APP Design
