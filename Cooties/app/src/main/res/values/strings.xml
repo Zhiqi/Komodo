@@ -3,11 +3,20 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_teacher">TeacherActivity</string>
+    <string name="title_activity_teacher">Teacher - Create a session</string>
+    <string name="title_activity_student_join">Student - Join a session</string>
+    <string name="title_activity_student_play">Student - Play</string>
 
-    <string name="button_send">Submit Name</string>
-    <string name="edit_message">Enter Name:</string>
-    <string name="title_activity_display_message">DisplayMessageActivity</string>
+    <!--Main activity -->
+    <string name="userName">Please enter username here</string>
+    <string name="login">login</string>
+    <!--Student Join Activity-->
+    <string name="sessionList">choose a session to join in</string>
+    <string name="join">join</string>
+    <!--Teacher Activity-->
+    <string name="sessionName">Enter a session name here</string>
+    <string name="create">create</string>
+    <!--Student Play Activity-->
 
 
 </resources>

@@ -4,25 +4,22 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.content.Intent;
 import android.view.View;
-import android.widget.EditText;
 
-public class MainActivity extends Activity {
 
-    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+public class StudentJoinActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_student_join);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_student_join, menu);
         return true;
     }
 
@@ -41,24 +38,12 @@ public class MainActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void login(View view) {
-        // Do something in response to button
-        Intent intent = new Intent(this, TeacherActivity.class);
-        EditText editText = (EditText) findViewById(R.id.edit_message);
-        String username = editText.getText().toString();
+    // After student select a session and click on "join" button
+    // call this function
+    // Join in that session and wait teacher to start the game (need to be done)
+    public void join(View view) {
+        System.out.println("join");
 
-
-        if (username.equals("T")) {
-            intent = new Intent(this, TeacherActivity.class);
-        }
-        else {
-            intent = new Intent(this, StudentJoinActivity.class);
-        }
-
-        Globals.customer = username;
-
-        intent.putExtra(EXTRA_MESSAGE, username);
-        startActivity(intent);
     }
 
 }

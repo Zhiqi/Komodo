@@ -17,8 +17,6 @@ import java.util.Arrays;
 
 public class TeacherActivity extends Activity {
 
-    private BeaconTransmitter beaconTransmitter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,64 +29,8 @@ public class TeacherActivity extends Activity {
 
         setContentView(R.layout.activity_teacher);
         Toast.makeText(getApplicationContext(), "Output customer: "+Globals.customer, Toast.LENGTH_LONG).show();
-
     }
 
-
-
-
-
-    public void startBLE(View view) {
-
-        if(beaconTransmitter != null){
-            //bluetooth may be off
-            return;
-        }
-
-        int result = BeaconTransmitter.checkTransmissionSupported(getApplicationContext());
-        if(result == BeaconTransmitter.SUPPORTED) {
-            Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
-
-            Beacon beacon = new Beacon.Builder()
-                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2("12345")
-                    .setId3("54321")
-                    .setManufacturer(0x4c00)
-                    .setTxPower(-59)
-                    .setDataFields(Arrays.asList(new Long[]{0l}))
-                    .build();
-            BeaconParser beaconParser = new BeaconParser()
-                    // altbeacon
-                    // .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-
-                    //ibeacon
-                    .setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24");
-            beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
-            beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-            beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-            beaconTransmitter.startAdvertising(beacon);
-        }
-
-
-        else if(result == BeaconTransmitter.NOT_SUPPORTED_MIN_SDK
-                || result == BeaconTransmitter.NOT_SUPPORTED_BLE
-                || result == BeaconTransmitter.NOT_SUPPORTED_MULTIPLE_ADVERTISEMENTS
-                || result == BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER){
-            Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
-
-    public void endBLE(View view) {
-        if(beaconTransmitter != null){
-            beaconTransmitter.stopAdvertising();
-            beaconTransmitter = null;
-            Toast.makeText(getApplicationContext(), "Beacon Off", Toast.LENGTH_SHORT).show();
-
-        }
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -110,5 +52,12 @@ public class TeacherActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // After teacher enter a session name and click on "create"
+    // call this function
+    // Start a new session and wait student to join the game (need to be done)
+    public void create(View view) {
+        System.out.println("create");
     }
 }
