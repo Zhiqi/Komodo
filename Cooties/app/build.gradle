@@ -29,5 +29,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'org.altbeacon:android-beacon-library:2+@aar'
-
+    compile files('src/main/java/libs/Collabrify-2.1.jar')
+    compile files('src/main/java/libs/guava-14.0.1.jar')
+    compile files('src/main/java/libs/protobuf-2.5.jar')
 }

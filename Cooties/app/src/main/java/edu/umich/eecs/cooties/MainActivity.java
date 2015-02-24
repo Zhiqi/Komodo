@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
 
+import edu.umich.imlc.collabrify.client.CollabrifyClient;
+import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
+
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
@@ -16,6 +19,18 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        try {
+////            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "gmail", "display_name", "collabrify.tester@gmail.com", "4891981239025664", false);
+////            Globals.myclient.requestSessionList();
+//
+//        }
+//        catch (CollabrifyException a) {
+//
+//        }
+
+
+
     }
 
 
