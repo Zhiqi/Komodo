@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/mtkliema/AndroidStudioProjects/MyApplication2/app/build/intermediates/exploded-aar/org.altbeacon/android-beacon-library/2.1.3/classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="54ff0c82277895632a46392a3663e73645ac2b0d">
+        <dex dex="/Users/mtkliema/AndroidStudioProjects/MyApplication2/app/build/intermediates/pre-dexed/debug/classes-1927df4d1ae63028a123380791a93895cd7a419f.jar" />
+    </item>
+
+</items>
