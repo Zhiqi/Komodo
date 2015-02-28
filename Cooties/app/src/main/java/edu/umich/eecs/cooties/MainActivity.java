@@ -2,6 +2,7 @@ package edu.umich.eecs.cooties;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
@@ -9,7 +10,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import edu.umich.imlc.collabrify.client.CollabrifyClient;
-import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 public class MainActivity extends Activity {
 
@@ -19,18 +19,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        try {
-////            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "gmail", "display_name", "collabrify.tester@gmail.com", "4891981239025664", false);
-////            Globals.myclient.requestSessionList();
-//
-//        }
-//        catch (CollabrifyException a) {
-//
-//        }
-
-
-
     }
 
 
@@ -58,13 +46,20 @@ public class MainActivity extends Activity {
 
     public void login(View view) {
         // Do something in response to button
-        Intent intent = new Intent(this, TeacherActivity.class);
+        Intent intent = new Intent(this, TeacherActivity_Initialize.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String username = editText.getText().toString();
 
+        try {
+            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username, "collabrify.tester@gmail.com", "4891981239025664", false);
+        }
+        catch (Exception a) {
+            Log.e("new Client", "new Collabrify Client Error");
+        }
+
 
         if (username.equals("T")) {
-            intent = new Intent(this, TeacherActivity.class);
+            intent = new Intent(this, TeacherActivity_Initialize.class);
         }
         else {
             intent = new Intent(this, StudentJoinActivity.class);
@@ -74,6 +69,7 @@ public class MainActivity extends Activity {
 
         intent.putExtra(EXTRA_MESSAGE, username);
         startActivity(intent);
+        finish();
     }
 
 }

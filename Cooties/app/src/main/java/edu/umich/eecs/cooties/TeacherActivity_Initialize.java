@@ -1,17 +1,14 @@
 package edu.umich.eecs.cooties;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
@@ -19,19 +16,26 @@ import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
-public class StudentJoinActivity extends Activity implements CollabrifyListener.CollabrifyListSessionsListener, CollabrifyListener.CollabrifyJoinSessionListener, CollabrifyListener.CollabrifySessionListener {
+public class TeacherActivity_Initialize extends Activity implements CollabrifyListener.CollabrifyCreateSessionListener, CollabrifyListener.CollabrifySessionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student_join);
-        try{
-            Globals.myclient.requestSessionList(Globals.tags, this);
+//        Intent intent = getIntent();
+//        String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+//        TextView textView = new TextView(this);
+//        textView.setTextSize(40);
+//        textView.setText(message);
+//        setContentView(textView);
 
-        }
-        catch(Exception e){
+        setContentView(R.layout.activity_teacher_initialize);
+        Intent intent = getIntent();
 
-        }
+        //can ignore this if using Globals structure
+        String username = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+
+        Toast.makeText(getApplicationContext(), "Entered with username: "+username, Toast.LENGTH_LONG).show();
+
 
     }
 
@@ -39,7 +43,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_student_join, menu);
+        getMenuInflater().inflate(R.menu.menu_teacher, menu);
         return true;
     }
 
@@ -58,100 +62,74 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         return super.onOptionsItemSelected(item);
     }
 
-    // After student select a session and click on "join" button
+    // After teacher enter a session name and click on "create"
     // call this function
-    // Join in that session and wait teacher to start the game (need to be done)
-    public void join(View view) {
-        System.out.println("join");
+    // Start a new session and wait student to join the game (need to be done)
+    public void create(View view) {
+        System.out.println("create start");
+
+        EditText editText = (EditText) findViewById(R.id.sessionName);
+        String sessionName = editText.getText().toString();
+
+
+        try {
+            System.out.println("Placeholder for create session");
+
+//            Globals.myclient.createSession(sessionName, Globals.tags, null, 0, true, this, this);
+        }
+        catch(Exception a){
+            System.out.println("create exception");
+
+        }
+
+        System.out.println("create done");
+
+
+        Intent intent = new Intent(this, TeacherActivity_Lobby.class);
+
+        startActivity(intent);
+        finish();
 
     }
 
-
-    private long sessionId;
-    private String sessionName;
-
+//    private long sessionID;
+//    private String sessionName;
+//
     @Override
-    public void onReceiveSessionList(final List<CollabrifySession> sessionList)
+    public void onSessionCreated(final CollabrifySession session)
     {
-        System.out.println("Receiving SEssion List in Student Activity");
 
-        if( sessionList.isEmpty())
-        {
-            System.out.println("No Session Available using Tags"+ Globals.tags.get(0));
-//            Log.i("CCO", "No Session Available using Tags: " + clientListener.tags.get(0));
-//            runOnUiThread(new Runnable()
+        Globals.mysession = session;
+        System.out.println("session created with id"+Globals.mysession.id());
+
+//        sessionID = session.id();
+//        sessionName = session.name();
+
+
+//        Toast.makeText(getApplicationContext(), "Session created, id: " + session.id(), Toast.LENGTH_LONG).show();
+//        runOnUiThread(new Runnable()
+//        {
+//            @Override
+//            public void run()
 //            {
-//                @Override
-//                public void run()
-//                {
-//                    Toast.makeText(getBaseContext(), "No possible Sessions to Join", Toast.LENGTH_SHORT).show();
-//                    finish();
-//                }
-//            });
-            return;
-        }
-
-        List<String> sessionNames = new ArrayList<String>();
-        for(CollabrifySession s : sessionList)
-        {
-            sessionNames.add(s.name());
-        }
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Choose a session").setItems(
-                sessionNames.toArray(new String[sessionList.size()]),
-                new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try
-                        {
+//                showToast("Session created, id: " + session.id());
+//                connectButton.setText(sessionName);
+//            }
+//        });
 
 
-//                            long sessionId = sessionList.get(which).id();
-
-                            sessionId = sessionList.get(which).id();
-                            sessionName = sessionList.get(which).name();
-
-                            Globals.myclient.joinSession(sessionId, null, true, StudentJoinActivity.this, StudentJoinActivity.this);
-
-                        }
-                        catch( CollabrifyException e)
-                        {
-                            Log.i("CCO", "Join Session Failed", e);
-                            finish();
-                        }
-                    }
-                });
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run() {
-                try{
-                    builder.show();
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onSessionJoined(long l, long l1){
 
     }
+
 
     @Override
     public void onError(CollabrifyException e)
     {
-        System.out.println("Student Join Error");
+        System.out.println("collabrify onerror");
 
 //        Toast.makeText(getApplicationContext(), "Collabrify Error", Toast.LENGTH_LONG).show();
 
-        Log.e("Student Activity Error", "error", e);
+        Log.e("Teacher Activity Error", "error", e);
 
 //        if(!e.isRecoverable())
 //        {

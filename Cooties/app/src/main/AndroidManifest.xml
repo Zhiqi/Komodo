@@ -2,8 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.umich.eecs.cooties" >
 
-    <application
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+    <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,15 +22,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TeacherActivity"
-            android:label="@string/title_activity_teacher" >
+            android:name=".TeacherActivity_Initialize"
+            android:label="@string/title_activity_teacher_initialze" >
         </activity>
-
-        <uses-permission android:name="android.permission.INTERNET" />
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
+        <activity
+            android:name=".StudentJoinActivity"
+            android:label="@string/title_activity_student_join" >
+        </activity>
+        <activity
+            android:name=".StudentPlayActivity"
+            android:label="@string/title_activity_student_play" >
+        </activity>
+        <activity
+            android:name=".TeacherActivity_List"
+            android:label="@string/title_activity_teacher_activity__list">
+        </activity>
+        <activity
+            android:name=".TeacherActivity_Lobby"
+            android:label="@string/title_activity_teacher_activity__lobby" >
+        </activity>
+        <activity
+            android:name=".TeacherActivity_In_Game_Lobby"
+            android:label="@string/title_activity_teacher_activity__in__game__lobby" >
+        </activity>
     </application>
 
 </manifest>
