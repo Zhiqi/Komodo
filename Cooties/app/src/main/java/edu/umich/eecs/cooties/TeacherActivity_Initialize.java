@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
@@ -74,8 +75,8 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 
         try {
             System.out.println("Placeholder for create session");
+            Globals.myclient.createSession(sessionName,Globals.tags,null,0,true,this);
 
-//            Globals.myclient.createSession(sessionName, Globals.tags, null, 0, true, this, this);
         }
         catch(Exception a){
             System.out.println("create exception");
@@ -176,6 +177,11 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
         System.out.println("basefile received ");
 
 //        Toast.makeText(getApplicationContext(), "Basefile Received", Toast.LENGTH_LONG).show();
+
+    }
+
+    @Override
+    public void onReceiveEvent(CollabrifyEvent collabrifyEvent) {
 
     }
 

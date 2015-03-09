@@ -13,6 +13,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
@@ -117,7 +118,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
                             Globals.myclient.joinSession(sessionId, null, true, StudentJoinActivity.this, StudentJoinActivity.this);
 
                         }
-                        catch( CollabrifyException e)
+                        catch( Exception e)
                         {
                             Log.i("CCO", "Join Session Failed", e);
                             finish();
@@ -139,10 +140,6 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         });
     }
 
-    @Override
-    public void onSessionJoined(long l, long l1){
-
-    }
 
     @Override
     public void onError(CollabrifyException e)
@@ -201,6 +198,11 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 
     }
 
+    @Override
+    public void onReceiveEvent(CollabrifyEvent collabrifyEvent) {
+
+    }
+
     public void onReceiveEvent(long l, int i, java.lang.String s, byte[] bytes, long l1){
         System.out.println("event received ");
 
@@ -220,4 +222,8 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     }
 
 
+    @Override
+    public void onSessionJoined(CollabrifySession collabrifySession) {
+
+    }
 }

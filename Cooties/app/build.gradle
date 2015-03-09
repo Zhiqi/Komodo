@@ -32,4 +32,5 @@ dependencies {
     compile files('src/main/java/libs/Collabrify-2.1.jar')
     compile files('src/main/java/libs/guava-14.0.1.jar')
     compile files('src/main/java/libs/protobuf-2.5.jar')
+    compile files('src/main/java/libs/Collabrify-2.30-hotfix.jar')
 }

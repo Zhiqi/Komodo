@@ -51,7 +51,7 @@ public class MainActivity extends Activity {
         String username = editText.getText().toString();
 
         try {
-            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username, "collabrify.tester@gmail.com", "4891981239025664", false);
+            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username,  "imlcteam@gmail.com", "2468", false);
         }
         catch (Exception a) {
             Log.e("new Client", "new Collabrify Client Error");
