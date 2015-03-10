@@ -3,6 +3,7 @@ package edu.umich.eecs.cooties;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,14 +22,22 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
 public class StudentJoinActivity extends Activity implements CollabrifyListener.CollabrifyListSessionsListener, CollabrifyListener.CollabrifyJoinSessionListener, CollabrifyListener.CollabrifySessionListener {
-
+    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+    private String username = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_join);
         try{
             Globals.myclient.requestSessionList(Globals.tags, this);
+            Intent iin= getIntent();
+            Bundle b = iin.getExtras();
+            if(b!=null)
+            {
+                username =(String) b.get(EXTRA_MESSAGE);
+               // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
 
+            }
         }
         catch(Exception e){
 
@@ -64,7 +73,9 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     // Join in that session and wait teacher to start the game (need to be done)
     public void join(View view) {
         System.out.println("join");
-
+        Intent myIntent = new Intent(this, StudentPlayActivity.class);
+        myIntent.putExtra(EXTRA_MESSAGE, username);
+        this.startActivity(myIntent);
     }
 
 
