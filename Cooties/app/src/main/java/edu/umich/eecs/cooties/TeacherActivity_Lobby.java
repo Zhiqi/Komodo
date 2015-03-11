@@ -112,7 +112,6 @@ public class TeacherActivity_Lobby extends Activity implements AdapterView.OnIte
     public void cancelSimulation(View view) {
         try{
             Globals.myclient.leaveSession(true, this);
-
         }
 
         catch(Exception e){

@@ -14,6 +14,7 @@ public class Globals {
     public static CollabrifyClient myclient;
     public static CollabrifySession mysession;
     public static List<String> tags = Arrays.asList("tag61");
+    public static GameState model = new GameState();
 
 }
 

@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
             Log.e("new Client", "new Collabrify Client Error");
         }
 
-
+        Globals.myclient.setSessionListener(Globals.model);
         if (username.equals("T")) {
             intent = new Intent(this, TeacherActivity_Initialize.class);
         }

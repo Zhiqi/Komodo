@@ -3,6 +3,7 @@ package edu.umich.eecs.cooties;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -20,18 +21,20 @@ import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
-public class StudentJoinActivity extends Activity implements CollabrifyListener.CollabrifyListSessionsListener, CollabrifyListener.CollabrifyJoinSessionListener, CollabrifyListener.CollabrifySessionListener {
+public class StudentJoinActivity extends Activity implements CollabrifyListener.CollabrifyListSessionsListener, CollabrifyListener.CollabrifyJoinSessionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        System.out.println("Global name:"+Globals.customer);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_join);
+
         try{
             Globals.myclient.requestSessionList(Globals.tags, this);
-
         }
         catch(Exception e){
-
         }
 
     }
@@ -108,14 +111,9 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
                     public void onClick(DialogInterface dialog, int which) {
                         try
                         {
-
-
-//                            long sessionId = sessionList.get(which).id();
-
                             sessionId = sessionList.get(which).id();
                             sessionName = sessionList.get(which).name();
-
-                            Globals.myclient.joinSession(sessionId, null, true, StudentJoinActivity.this, StudentJoinActivity.this);
+                            Globals.myclient.joinSession(sessionId, null, StudentJoinActivity.this);
 
                         }
                         catch( Exception e)
@@ -145,9 +143,6 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     public void onError(CollabrifyException e)
     {
         System.out.println("Student Join Error");
-
-//        Toast.makeText(getApplicationContext(), "Collabrify Error", Toast.LENGTH_LONG).show();
-
         Log.e("Student Activity Error", "error", e);
 
 //        if(!e.isRecoverable())
@@ -156,74 +151,11 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 //        }
     }
 
-
-    @Override
-    public void onParticipantJoined(CollabrifyParticipant p)
-    {
-        System.out.println("collabrify partiicpant joined:" + p.getDisplayName());
-
-//        Toast.makeText(getBaseContext(), p.getDisplayName() + " has Joined!", Toast.LENGTH_LONG).show();
-//        panCakeLocal obj = localUndoStack.peek();
-//        obj.run();
-    }
-    @Override
-    public void onParticipantLeft(CollabrifyParticipant p)
-    {
-        System.out.println(p.getDisplayName() + " has Left!");
-
-//        Toast.makeText(getBaseContext(), p.getDisplayName() + " has Left!", Toast.LENGTH_LONG).show();
-    }
-
-
-    public void onSessionEnd(long id)
-    {
-        System.out.println(" Collabrify session ended!:"+id);
-
-//        Toast.makeText(getApplicationContext(), "Session ended:" +id, Toast.LENGTH_LONG).show();
-
-        this.finish();
-    }
-
-    public void onBaseFileUploadComplete(long l){
-        System.out.println("basefile upload done ");
-
-//        Toast.makeText(getApplicationContext(), "Basefile Upload Complete", Toast.LENGTH_LONG).show();
-
-    }
-
-    public void onBaseFileReceived(java.io.File file){
-        System.out.println("basefile received ");
-
-//        Toast.makeText(getApplicationContext(), "Basefile Received", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onReceiveEvent(CollabrifyEvent collabrifyEvent) {
-
-    }
-
-    public void onReceiveEvent(long l, int i, java.lang.String s, byte[] bytes, long l1){
-        System.out.println("event received ");
-
-//        Toast.makeText(getApplicationContext(), "Event Received", Toast.LENGTH_LONG).show();
-
-    }
-
-
-
-    public void onFurtherJoinsPrevented(){
-        System.out.println("Further Joins Prevented ");
-
-//        Toast.makeText(getApplicationContext(), "Further Joins Prevented", Toast.LENGTH_LONG).show();
-
-
-
-    }
-
-
     @Override
     public void onSessionJoined(CollabrifySession collabrifySession) {
-
+        Globals.mysession = collabrifySession;
+        Intent intent = new Intent(this, StudentPlayActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

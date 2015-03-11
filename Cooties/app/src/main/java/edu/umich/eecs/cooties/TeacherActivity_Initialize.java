@@ -17,7 +17,7 @@ import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
-public class TeacherActivity_Initialize extends Activity implements CollabrifyListener.CollabrifyCreateSessionListener, CollabrifyListener.CollabrifySessionListener {
+public class TeacherActivity_Initialize extends Activity implements CollabrifyListener.CollabrifyCreateSessionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 
     // After teacher enter a session name and click on "create"
     // call this function
-    // Start a new session and wait student to join the game (need to be done)
+    // Start a new session and set the listener to
     public void create(View view) {
         System.out.println("create start");
 
@@ -86,10 +86,6 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
         System.out.println("create done");
 
 
-        Intent intent = new Intent(this, TeacherActivity_Lobby.class);
-
-        startActivity(intent);
-        finish();
 
     }
 
@@ -102,6 +98,11 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 
         Globals.mysession = session;
         System.out.println("session created with id"+Globals.mysession.id());
+
+        Intent intent = new Intent(this, TeacherActivity_Lobby.class);
+
+        startActivity(intent);
+        finish();
 
 //        sessionID = session.id();
 //        sessionName = session.name();
@@ -122,86 +123,28 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 
     }
 
-
     @Override
-    public void onError(CollabrifyException e)
-    {
-        System.out.println("collabrify onerror");
-
-//        Toast.makeText(getApplicationContext(), "Collabrify Error", Toast.LENGTH_LONG).show();
-
-        Log.e("Teacher Activity Error", "error", e);
-
-//        if(!e.isRecoverable())
-//        {
-//            //the client has been reset and we are no longer in a session, update UI
-//        }
-    }
-
-
-    @Override
-    public void onParticipantJoined(CollabrifyParticipant p)
-    {
-        System.out.println("collabrify partiicpant joined:" + p.getDisplayName());
-
-//        Toast.makeText(getBaseContext(), p.getDisplayName() + " has Joined!", Toast.LENGTH_LONG).show();
-//        panCakeLocal obj = localUndoStack.peek();
-//        obj.run();
-    }
-    @Override
-    public void onParticipantLeft(CollabrifyParticipant p)
-    {
-        System.out.println(p.getDisplayName() + " has Left!");
-
-//        Toast.makeText(getBaseContext(), p.getDisplayName() + " has Left!", Toast.LENGTH_LONG).show();
-    }
-
-
-    public void onSessionEnd(long id)
-    {
-        System.out.println(" Collabrify session ended!:"+id);
-
-//        Toast.makeText(getApplicationContext(), "Session ended:" +id, Toast.LENGTH_LONG).show();
-
-        this.finish();
-    }
-
-    public void onBaseFileUploadComplete(long l){
-        System.out.println("basefile upload done ");
-
-//        Toast.makeText(getApplicationContext(), "Basefile Upload Complete", Toast.LENGTH_LONG).show();
-
-    }
-
-    public void onBaseFileReceived(java.io.File file){
-        System.out.println("basefile received ");
-
-//        Toast.makeText(getApplicationContext(), "Basefile Received", Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onReceiveEvent(CollabrifyEvent collabrifyEvent) {
-
-    }
-
-    public void onReceiveEvent(long l, int i, java.lang.String s, byte[] bytes, long l1){
-        System.out.println("event received ");
-
-//        Toast.makeText(getApplicationContext(), "Event Received", Toast.LENGTH_LONG).show();
+    public void onError(CollabrifyException e) {
 
     }
 
 
-
-    public void onFurtherJoinsPrevented(){
-        System.out.println("Further Joins Prevented ");
-
-//        Toast.makeText(getApplicationContext(), "Further Joins Prevented", Toast.LENGTH_LONG).show();
-
-
-
-    }
-
+//    System.out.println("collabrify onerror");
+//    Log.e("Teacher Activity Error", "error", e);
+//
+//
+//    System.out.println("collabrify partiicpant joined:" + p.getDisplayName());
+//    System.out.println(p.getDisplayName() + " has Left!");
+//
+//    System.out.println(" Collabrify session ended!:"+id);
+//    this.finish();
+//
+//    System.out.println("basefile upload done ");
+//
+//    System.out.println("basefile received ");
+//
+//    System.out.println("event received ");
+//
+//    System.out.println("Further Joins Prevented ");
 
 }
