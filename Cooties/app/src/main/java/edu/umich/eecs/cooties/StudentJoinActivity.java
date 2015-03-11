@@ -75,13 +75,13 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     // After student select a session and click on "join" button
     // call this function
     // Join in that session and wait teacher to start the game (need to be done)
-    public void join(View view) {
-        System.out.println("join");
-        Intent myIntent = new Intent(this, StudentPlayActivity.class);
-        myIntent.putExtra(EXTRA_MESSAGE, username);
-        this.startActivity(myIntent);
-    }
-
+//    public void join(View view) {
+//        System.out.println("join");
+//        Intent myIntent = new Intent(this, StudentPlayActivity.class);
+//        myIntent.putExtra(EXTRA_MESSAGE, username);
+//        this.startActivity(myIntent);
+//    }
+//
 
     private long sessionId;
     private String sessionName;
@@ -167,7 +167,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     public void onSessionJoined(CollabrifySession collabrifySession) {
         Globals.mysession = collabrifySession;
         Intent intent = new Intent(this, StudentPlayActivity.class);
-        
+        intent.putExtra(EXTRA_MESSAGE, username);
         startActivity(intent);
         finish();
     }
