@@ -22,7 +22,8 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
 public class StudentJoinActivity extends Activity implements CollabrifyListener.CollabrifyListSessionsListener, CollabrifyListener.CollabrifyJoinSessionListener {
-
+    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+    private String username = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -33,8 +34,17 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 
         try{
             Globals.myclient.requestSessionList(Globals.tags, this);
+            Intent iin= getIntent();
+            Bundle b = iin.getExtras();
+            if(b!=null)
+            {
+                username =(String) b.get(EXTRA_MESSAGE);
+               // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
+
+            }
         }
         catch(Exception e){
+
         }
 
     }
@@ -67,7 +77,9 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     // Join in that session and wait teacher to start the game (need to be done)
     public void join(View view) {
         System.out.println("join");
-
+        Intent myIntent = new Intent(this, StudentPlayActivity.class);
+        myIntent.putExtra(EXTRA_MESSAGE, username);
+        this.startActivity(myIntent);
     }
 
 
@@ -155,6 +167,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     public void onSessionJoined(CollabrifySession collabrifySession) {
         Globals.mysession = collabrifySession;
         Intent intent = new Intent(this, StudentPlayActivity.class);
+        
         startActivity(intent);
         finish();
     }

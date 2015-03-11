@@ -2,6 +2,7 @@ package edu.umich.eecs.cooties;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,7 +15,7 @@ import edu.umich.imlc.collabrify.client.CollabrifyClient;
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
-
+    Globals global;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +66,9 @@ public class MainActivity extends Activity {
             intent = new Intent(this, StudentJoinActivity.class);
         }
 
-        Globals.customer = username;
 
-        intent.putExtra(EXTRA_MESSAGE, username);
+        intent.putExtra(EXTRA_MESSAGE,username);
+
         startActivity(intent);
         finish();
     }
