@@ -20,11 +20,14 @@
         android:text="Stop Transmission"
         android:onClick="endBLE"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="37dp" />
+        android:layout_marginTop="37dp"
+        android:id="@+id/button" />
 
     <EditText android:id="@+id/rangingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="@string/userName" />
+        android:layout_below="@+id/button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="43dp" />
 
 </RelativeLayout>
