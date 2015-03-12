@@ -12,17 +12,18 @@ public class TouchMessage {
     public long targetUserId;
     public boolean infected;
     public boolean incubation;
+    Touch1 touch;
 
     // Creat a protobuf into collabrify
-    public Touch1.Builder initWithInfected(boolean infected, boolean incubation, long sourceUserId, long targetUserId, long timestamp) {
-        Touch1.Builder touch = Touch1.newBuilder();
-        touch.setInfected(infected);
-        touch.setIncubation(incubation);
-        touch.setSourceUserId(sourceUserId);
-        touch.setTimestamp(timestamp);
-        touch.setTargetUserId(targetUserId);
+    public Touch1 initWithInfected(boolean infected, boolean incubation, long sourceUserId, long targetUserId, long timestamp) {
+        Touch1.Builder touch1 = Touch1.newBuilder();
+        touch1.setInfected(infected);
+        touch1.setIncubation(incubation);
+        touch1.setSourceUserId(sourceUserId);
+        touch1.setTimestamp(timestamp);
+        touch1.setTargetUserId(targetUserId);
 
-        touch.build();
+        touch = touch1.build();
 
         infected = touch.getInfected();
         incubation = touch.getIncubation();
@@ -36,7 +37,7 @@ public class TouchMessage {
     // Get a protobuf from the collabrify
     public void initWithBuffer(byte[] data){
         try {
-            Touch1 touch = Touch1.parseFrom(data);
+            touch = Touch1.parseFrom(data);
 
             infected = touch.getInfected();
             incubation = touch.getIncubation();
@@ -49,4 +50,9 @@ public class TouchMessage {
         }
     }
 
+    // Parse data into string
+    byte[] outputBuffer(){
+        byte[] buffer = touch.toByteArray();
+        return buffer;
+    }
 }

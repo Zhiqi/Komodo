@@ -12,19 +12,20 @@ public class BaseFileMessage {
     public int incubationTime = 0;
     public int ibeaconMajor = 0;
     public int hideHealthStatus = 1; // 1 for true and 0 for false
+    BaseFile1 baseFile;
 
     // Creat a protobuf into collabrify
-    public BaseFile1.Builder initWithInfectedUser(ArrayList<Long> userId, int incTime, int major, int hideHealthStatus) {
-        BaseFile1.Builder baseFile = BaseFile1.newBuilder();
+    public BaseFile1 initWithInfectedUser(ArrayList<Long> userId, int incTime, int major, int hideHealthStatus) {
+        BaseFile1.Builder baseFile1 = BaseFile1.newBuilder();
 
         for(int i = 0; i < userId.size(); i++) {
-            baseFile.setInfectedUserId(i, userId.get(i));
+            baseFile1.setInfectedUserId(i, userId.get(i));
         }
-        baseFile.setIbeaconMajor(major);
-        baseFile.setIncubationTimer(incTime);
-        baseFile.setHideHealthStatus(hideHealthStatus);
+        baseFile1.setIbeaconMajor(major);
+        baseFile1.setIncubationTimer(incTime);
+        baseFile1.setHideHealthStatus(hideHealthStatus);
 
-        baseFile.build();
+        baseFile = baseFile1.build();
 
         ibeaconMajor = baseFile.getIbeaconMajor();
         infectedUserId = userId;
@@ -38,7 +39,7 @@ public class BaseFileMessage {
     public void initWithBuffer(byte[] data){
 
         try {
-            BaseFile1 baseFile = BaseFile1.parseFrom(data);
+            baseFile = BaseFile1.parseFrom(data);
 
             ibeaconMajor = baseFile.getIbeaconMajor();
 
@@ -53,6 +54,12 @@ public class BaseFileMessage {
         catch (com.google.protobuf.InvalidProtocolBufferException except){
             System.out.println("Unreadable baseFile message");
         }
+    }
+
+    // Parse data into string
+    byte[] outputBuffer(){
+        byte[] buffer = baseFile.toByteArray();
+        return buffer;
     }
 
 }

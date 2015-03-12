@@ -7,17 +7,18 @@ import edu.umich.eecs.cooties.PlayerAnnounce.PlayerAnnounce1;
  */
 public class PlayerAnnounceMessage {
     public long user_id;
-    public int minor;
+    public short minor;
     public String displayName;
+    PlayerAnnounce1 player;
 
     // Creat a protobuf into collabrify
-    public PlayerAnnounce1.Builder initWithInfectedUser(long userId, int minor, String name) {
-        PlayerAnnounce1.Builder player = PlayerAnnounce1.newBuilder();
-        player.setUserId(userId);
-        player.setMinor(minor);
-        player.setDisplayName(name);
+    public PlayerAnnounce1 initWithInfectedUser(long userId, int minor, String name) {
+        PlayerAnnounce1.Builder player1 = PlayerAnnounce1.newBuilder();
+        player1.setUserId(userId);
+        player1.setMinor(minor);
+        player1.setDisplayName(name);
 
-        player.build();
+        player = player1.build();
 
         minor = player.getMinor();
         user_id = player.getUserId();
@@ -29,14 +30,20 @@ public class PlayerAnnounceMessage {
     // Get a protobuf from the collabrify
     public void initWithBuffer(byte[] data){
         try {
-            PlayerAnnounce1 player = PlayerAnnounce1.parseFrom(data);
+            player = PlayerAnnounce1.parseFrom(data);
 
-            minor = player.getMinor();
+            minor = (short)player.getMinor();
             user_id = player.getUserId();
             displayName = player.getDisplayName();
         }
         catch (com.google.protobuf.InvalidProtocolBufferException except){
             System.out.println("unreadable playerAnnounce message");
         }
+    }
+
+    // Parse data into string
+    byte[] outputBuffer(){
+        byte[] buffer = player.toByteArray();
+        return buffer;
     }
 }
