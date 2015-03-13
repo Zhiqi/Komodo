@@ -14,8 +14,6 @@ import edu.umich.imlc.collabrify.client.CollabrifyClient;
 
 public class MainActivity extends Activity {
 
-    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +64,6 @@ public class MainActivity extends Activity {
         }
 
         Globals.username = username;
-        //intent.putExtra(EXTRA_MESSAGE,username);
         startActivity(intent);
         finish();
     }

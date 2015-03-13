@@ -30,10 +30,10 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 //        setContentView(textView);
 
         setContentView(R.layout.activity_teacher_initialize);
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
 
         //can ignore this if using Globals structure
-        String username = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        String username = Globals.username;
 
         Toast.makeText(getApplicationContext(), "Entered with username: "+username, Toast.LENGTH_LONG).show();
 

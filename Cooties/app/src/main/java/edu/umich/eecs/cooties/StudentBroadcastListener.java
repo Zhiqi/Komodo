@@ -13,6 +13,7 @@ import edu.umich.eecs.cooties.PlayerInfo;
 /**
  * Created by luke on 3/10/15.
  */
+
 public class StudentBroadcastListener {
 
     CollabrifyListener.CollabrifyBroadcastListener listen;
@@ -25,12 +26,12 @@ public class StudentBroadcastListener {
         listen = new CollabrifyListener.CollabrifyBroadcastListener() {
             @Override
             public void onBroadcastDone(CollabrifyEvent collabrifyEvent) {
-                System.out.println("@@@Event broadcast done");
+                //System.out.println("@@@Event broadcast done");
             }
 
             @Override
             public void onError(CollabrifyException e) {
-                System.out.println("@@@CollabrifyBroadcastListener error");
+                //System.out.println("@@@CollabrifyBroadcastListener error");
             }
         };
     }
@@ -38,7 +39,7 @@ public class StudentBroadcastListener {
     // announce player himself when joining a session
     // return a minor value which will be used for beacon creation
     public String announcePlayer() {
-        System.out.println("@@@@Anounce player");
+        System.out.println("@@@@Announce player");
         long playerId = Globals.selfId;
         short minor = newMinor(playerId);
         // Create an object for PlayAnnounce message
@@ -51,7 +52,7 @@ public class StudentBroadcastListener {
 
     // broadcast the message
     private void broadcast(byte[] data, String eventType){
-        System.out.println("@@@Attempt to broadcast");
+        //System.out.println("@@@Attempt to broadcast");
         Globals.myclient.broadcast(data, eventType, listen);
     }
 
@@ -68,7 +69,7 @@ public class StudentBroadcastListener {
     }
 
     // When two devices are touched, broadcast a touch message into session
-    private void detectedDevice(short minor) {
+    public void detectedDevice(short minor) {
         boolean inIncubation = incubationTimer > 0 && !incubationCompleted;
         long timestamp = System.currentTimeMillis();
         TouchMessage msg =  new TouchMessage();

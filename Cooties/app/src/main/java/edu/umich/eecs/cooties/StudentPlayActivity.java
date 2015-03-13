@@ -34,32 +34,20 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
     private BeaconTransmitter beaconTransmitter;
     private String minor;
     private StudentBroadcastListener broadcastListener; // use this for broadcast
-
+    private SearchBeacon searchBeacon; // select matched device
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_play);
-
-        /*
-        Intent iin= getIntent();
-        Bundle b = iin.getExtras();
-
-        if(b!=null)
-        {
-            username =(String) b.get(EXTRA_MESSAGE);
-            // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
-
-        }
-        */
-
         verifyBluetooth();
 
         broadcastListener = new StudentBroadcastListener();
         minor = broadcastListener.announcePlayer();
-
+        searchBeacon = new SearchBeacon();
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
         beaconManager.bind(this);
+
     }
 
     @Override
@@ -117,46 +105,31 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
 
             });
             builder.show();
-
         }
-
     }
 
     @Override
     public void onBeaconServiceConnect() {
-        System.out.println("Beacon service connected:");
         Toast.makeText(getApplicationContext(), "Beacon service connected:", Toast.LENGTH_SHORT).show();
 
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-
-                //System.out.println("Start Beacon rangingkkkk");
-
                 if (beacons.size() > 0) {
-                    //Toast.makeText(getApplicationContext(), "Beacon detected", Toast.LENGTH_SHORT).show();
-                    //("Beacon detected");
-
-                    //EditText editText = (EditText)StudentPlayActivity.this
-                    //      .findViewById(R.id.rangingText);
-
-                    //System.out.println("The first beacon "+firstBeacon.toString()+" is about "+firstBeacon.getDistance()+" meters away.");
                     logToDisplay("@@@@@number of beacons detected is: " + beacons.size());
+                    searchBeacon.beacons(beacons);
+                    /*
                     Beacon [] beaconArr = beacons.toArray(new Beacon[beacons.size()]);
                     for(Beacon beacon : beaconArr) {
-                        logToDisplay("Beacon with name " + beacon.getId2() + " is about " + beacon.getDistance() + " meters away.");
+                        logToDisplay("Beacon with name " + beacon.getId3() + " is about " + beacon.getRssi() + " meters away.");
                     }
+                    */
                 }
             }
 
         });
-        //startBLE();
         try {
-            System.out.println("attempt to Start Beacon ranging");
             beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId",null,null,null));
-//                    Identifier.parse("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6"),
-            //                  Identifier.parse("12345"), Identifier.parse("54321")));
-
         } catch (RemoteException e) {   }
     }
 
@@ -183,17 +156,13 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
                     .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2(minor)
-                    .setId3("54321")
+                    .setId2("12345")
+                    .setId3(minor)
                     .setManufacturer(0x4c00)
                     .setTxPower(-59)
                     .setDataFields(Arrays.asList(new Long[]{0l}))
                     .build();
             BeaconParser beaconParser = new BeaconParser()
-                    // altbeacon
-                    // .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-
-                    //ibeacon
                     .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
             beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
             //beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
@@ -204,9 +173,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
                 @Override
                 public void onStartSuccess(AdvertiseSettings settingsInEffect) {
                     super.onStartSuccess(settingsInEffect);
-
-                    Toast.makeText(getApplicationContext(), "transmit iBeacon startiii:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getApplicationContext(), "transmit iBeacon start:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
                 }
             };
             beaconTransmitter.startAdvertising(beacon, callback);
@@ -218,7 +185,6 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
                 || result == BeaconTransmitter.NOT_SUPPORTED_MULTIPLE_ADVERTISEMENTS
                 || result == BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER){
             Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
-
         }
 
     }

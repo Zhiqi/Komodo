@@ -25,24 +25,11 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        System.out.println("Global name:"+Globals.username);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_join);
 
         try{
             Globals.myclient.requestSessionList(Globals.tags, this);
-            /*
-            Intent iin= getIntent();
-            Bundle b = iin.getExtras();
-            if(b!=null)
-            {
-                username =(String) b.get(EXTRA_MESSAGE);
-               // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
-
-            }
-            */
         }
         catch(Exception e){
 
@@ -72,17 +59,6 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         return super.onOptionsItemSelected(item);
     }
 
-    // After student select a session and click on "join" button
-    // call this function
-    // Join in that session and wait teacher to start the game (need to be done)
-//    public void join(View view) {
-//        System.out.println("join");
-//        Intent myIntent = new Intent(this, StudentPlayActivity.class);
-//        myIntent.putExtra(EXTRA_MESSAGE, username);
-//        this.startActivity(myIntent);
-//    }
-//
-
     private long sessionId;
     private String sessionName;
 
@@ -90,7 +66,6 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     public void onReceiveSessionList(final List<CollabrifySession> sessionList)
     {
         System.out.println("Receiving Session List in Student Activity");
-        //Toast.makeText(getApplicationContext(), "" + Globals.myclient.currentSessionParticipantId(), Toast.LENGTH_SHORT).show();
         if( sessionList.isEmpty())
         {
             System.out.println("No Session Available using Tags"+ Globals.tags.get(0));
@@ -155,10 +130,6 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         System.out.println("Student Join Error");
         Log.e("Student Activity Error", "error", e);
 
-//        if(!e.isRecoverable())
-//        {
-//            //the client has been reset and we are no longer in a session, update UI
-//        }
     }
 
     @Override
@@ -167,7 +138,6 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         Globals.mysession = collabrifySession;
         Globals.selfId = Globals.myclient.currentSessionParticipantId();
         Intent intent = new Intent(this, StudentPlayActivity.class);
-        //intent.putExtra(EXTRA_MESSAGE, username);
 
         startActivity(intent);
         finish();

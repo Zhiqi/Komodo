@@ -21,10 +21,14 @@ public class Globals {
 
     public static long selfId; /* participant id
                                     set in StudentJoinActivity */
-    public static Hashtable<Short, Long> playerMinors = new Hashtable<Short, Long>();; /* key: minor value: userId (participant id)
+    public static Hashtable<Short, Long> playerMinors = new Hashtable<Short, Long>(); /* key: minor value: userId (participant id)
                                                             */
     public static Hashtable<Short, PlayerInfo> playerInfo = new Hashtable<Short, PlayerInfo>(); /* key: minor value; value: playerInfo
                                                                */
+    public static Hashtable<Short, Long> lastSend = new Hashtable<Short, Long>(); // key: minor, value: timestamp;
+    public static Hashtable<Short, Long> rangedBeacons = new Hashtable<Short, Long>(); // key: minor, value: timestamp
+    public static short stickyMinor;
+
     public static List<String> tags = Arrays.asList("tag61");
 
 }

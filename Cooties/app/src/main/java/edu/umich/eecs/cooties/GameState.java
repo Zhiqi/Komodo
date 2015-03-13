@@ -27,7 +27,6 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
     //similar to HMCTouchBeaconEngine.m:collabrifyReceivedEvent
     @Override
     public void onReceiveEvent(CollabrifyEvent event) {
-        System.out.println("event received ");
         String eventType = event.type();
         byte[] data = event.data();
 
@@ -45,13 +44,13 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
             PlayerAnnounceMessage msg = new PlayerAnnounceMessage();
             msg.initWithBuffer(data);
             acquiredNewParticipant(msg);
-
+            /*
             if(msg.user_id == Globals.selfId) {
                 System.out.println("self detected");
                 // check if beacon is turned on
                 //gameStarted = [self turnOnBeacons];
             }
-
+            */
             printPlayerList();
         }
         else if(eventType.equals("Touch")) {
@@ -153,7 +152,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
 
     @Override
     public void onParticipantJoined(CollabrifyParticipant collabrifyParticipant) {
-        System.out.println("collabrify partiicpant joined:" + collabrifyParticipant.getDisplayName());
+        System.out.println("collabrify participant joined:" + collabrifyParticipant.getDisplayName());
 
     }
 
@@ -180,9 +179,12 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
 
     }
 
+    // Helper function for print all players in session
+    // just for debug
     private void printPlayerList(){
-        for (short key: Globals.playerMinors.keySet()) {
-            System.out.println(key +":" + Globals.playerMinors.get(key));
+        System.out.println("@@@number of players in the session is:" + Globals.playerInfo.size());
+        for (short key: Globals.playerInfo.keySet()) {
+            System.out.println(key +":" + Globals.playerInfo.get(key).name);
         }
     }
 }
