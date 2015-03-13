@@ -17,13 +17,6 @@ public class SearchBeacon {
         listener = new StudentBroadcastListener();
     }
 
-    public void receivedEventFrom(short minor){
-        final long timeUntilNextAllowedConnectAfterConnect = 30;
-
-        //after an event is received, prevent another connection for 30 seconds
-        Globals.lastSend.put(minor, System.currentTimeMillis() + timeUntilNextAllowedConnectAfterConnect*1000);
-    }
-
     private void scanForSignificantConnection() {
         final int lengthOfConnection = 1;
         final int timeSinceLastSend = 2;

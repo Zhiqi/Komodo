@@ -1,5 +1,6 @@
 package edu.umich.eecs.cooties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
@@ -27,6 +28,11 @@ public class Globals {
                                                                */
     public static Hashtable<Short, Long> lastSend = new Hashtable<Short, Long>(); // key: minor, value: timestamp;
     public static Hashtable<Short, Long> rangedBeacons = new Hashtable<Short, Long>(); // key: minor, value: timestamp
+
+    public static ArrayList<HistoryItem> historyList = new ArrayList<HistoryItem>();
+
+    public static Hashtable<Long, ArrayList> touchDict = new Hashtable<Long, ArrayList>(); // key: timestamp, value: list of touch message received
+
     public static short stickyMinor;
 
     public static List<String> tags = Arrays.asList("tag61");

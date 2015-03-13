@@ -1,6 +1,7 @@
 package edu.umich.eecs.cooties;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
@@ -54,7 +55,9 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
             printPlayerList();
         }
         else if(eventType.equals("Touch")) {
-            //[self touchEventHelper:[[TouchMessage alloc] initWithBuffer:data]];
+            TouchMessage msg = new TouchMessage();
+            msg.initWithBuffer(data);
+            touchEventHelper(msg);
         }
         /*
         else if([eventType isEqualToString:@"StopSim"]) {
@@ -71,8 +74,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
             self.showMeetingRank = false;
             [self.historyDelegate refresh];
         }
-*/
-        /*
+
         if(self.delegate && [self.delegate respondsToSelector:@selector(onReceiveEvent:orderId:eventType:)]) {
             [self.delegate onReceiveEvent:data
             orderId:event.orderID
@@ -148,6 +150,84 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
             }
         }
         */
+    }
+
+    public void receivedEventFrom(short minor){
+        final long timeUntilNextAllowedConnectAfterConnect = 30;
+
+        //after an event is received, prevent another connection for 30 seconds
+        Globals.lastSend.put(minor, System.currentTimeMillis() + timeUntilNextAllowedConnectAfterConnect*1000);
+    }
+
+    void touchEventHelper(TouchMessage msg){
+        CheckTouch checkTouch = new CheckTouch();
+        ArrayList<TouchMessage> foundEvents = checkTouch.bumpEvents(msg);
+
+        if(foundEvents.size() > 0) {
+            for(TouchMessage touch : foundEvents) {
+                /*
+                hmc_infection_t infection;
+                if(msg.infected && touch.infected) infection = HMCAlreadyInfected;
+                else if(msg.infected && !touch.infected) infection = HMCSecondUser;
+                else if(!msg.infected && touch.infected) infection = HMCFirstUser;
+                else infection = HMCNone;
+                */
+
+                PlayerInfo firstPlayer;
+                PlayerInfo secondPlayer;
+                if(msg.sourceUserId == Globals.selfId){
+                    firstPlayer = Globals.playerInfo.get(msg.sourceUserId);
+                    secondPlayer = Globals.playerInfo.get(touch.sourceUserId);
+                } else {
+                    firstPlayer = Globals.playerInfo.get(touch.sourceUserId);
+                    secondPlayer = Globals.playerInfo.get(msg.sourceUserId);
+                    //if(infection == HMCFirstUser) infection = HMCSecondUser;
+                    //else if(infection == HMCSecondUser) infection = HMCFirstUser;
+                }
+
+                // The block can only be run on only one thread for any given time
+                    HistoryItem historyItem = new HistoryItem(msg.timestamp, firstPlayer, secondPlayer);
+
+                    if(Globals.historyList.contains(historyItem)) {
+                        //History item records how many are created.  If history list already contains it, then subtract
+                        historyItem.decrement();
+                    }
+                    else {
+                        Globals.historyList.add(historyItem);
+
+                        if(msg.sourceUserId == Globals.selfId || touch.sourceUserId == Globals.selfId) {
+                            short targetMinor;
+                            if(firstPlayer.playerId == Globals.selfId) {
+                                targetMinor = secondPlayer.minor;
+                            }
+                            else {
+                                targetMinor = firstPlayer.minor;
+                            }
+                            receivedEventFrom(targetMinor);
+
+                            /*
+                            bool newlyInfected = false;
+                            if(!self.infected && (infection == HMCFirstUser || infection == HMCSecondUser)) {
+                                newlyInfected = true;
+                            }
+
+                            if(self.delegate && [self.delegate respondsToSelector:@selector(receivedTouchEvent:isInfected:)]) {
+                                NSNumber *other;
+                                if([msg.sourceUserId longLongValue] == [[HMCCollabrify sharedinstance] participantId]) {
+                                    other = touch.sourceUserId;
+                                } else {
+                                    other = msg.sourceUserId;
+                                }
+
+                                HMCPlayerInfo *playerInfo = [self.playerInfo objectForKey:other];
+                                [self.delegate receivedTouchEvent:playerInfo isInfected:newlyInfected];
+                            }
+                            */
+                        }
+                    }
+            }
+        }
+
     }
 
     @Override
