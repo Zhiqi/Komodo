@@ -15,13 +15,12 @@ import edu.umich.imlc.collabrify.client.CollabrifyClient;
 public class MainActivity extends Activity {
 
     public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
-    Globals global;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,12 +52,12 @@ public class MainActivity extends Activity {
 
         try {
             Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username,  "imlcteam@gmail.com", "2468", false);
+            Globals.myclient.setSessionListener(Globals.model);
         }
         catch (Exception a) {
             Log.e("new Client", "new Collabrify Client Error");
         }
 
-        Globals.myclient.setSessionListener(Globals.model);
         if (username.equals("T")) {
             intent = new Intent(this, TeacherActivity_Initialize.class);
         }
@@ -66,9 +65,8 @@ public class MainActivity extends Activity {
             intent = new Intent(this, StudentJoinActivity.class);
         }
 
-
-        intent.putExtra(EXTRA_MESSAGE,username);
-
+        Globals.username = username;
+        //intent.putExtra(EXTRA_MESSAGE,username);
         startActivity(intent);
         finish();
     }

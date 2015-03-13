@@ -32,22 +32,31 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
 
     private BeaconManager beaconManager;
     private BeaconTransmitter beaconTransmitter;
-    private String username = "";
+    private String minor;
+    private StudentBroadcastListener broadcastListener; // use this for broadcast
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_play);
+
+        /*
         Intent iin= getIntent();
         Bundle b = iin.getExtras();
 
         if(b!=null)
         {
             username =(String) b.get(EXTRA_MESSAGE);
-           // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
 
         }
+        */
+
         verifyBluetooth();
+
+        broadcastListener = new StudentBroadcastListener();
+        minor = broadcastListener.announcePlayer();
 
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
         beaconManager.bind(this);
@@ -135,7 +144,6 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
                     logToDisplay("@@@@@number of beacons detected is: " + beacons.size());
                     Beacon [] beaconArr = beacons.toArray(new Beacon[beacons.size()]);
                     for(Beacon beacon : beaconArr) {
-
                         logToDisplay("Beacon with name " + beacon.getId2() + " is about " + beacon.getDistance() + " meters away.");
                     }
                 }
@@ -175,7 +183,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
                     .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2(username)
+                    .setId2(minor)
                     .setId3("54321")
                     .setManufacturer(0x4c00)
                     .setTxPower(-59)

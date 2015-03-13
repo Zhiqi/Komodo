@@ -22,18 +22,18 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
 public class StudentJoinActivity extends Activity implements CollabrifyListener.CollabrifyListSessionsListener, CollabrifyListener.CollabrifyJoinSessionListener {
-    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
-    private String username = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        System.out.println("Global name:"+Globals.customer);
+        System.out.println("Global name:"+Globals.username);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_join);
 
         try{
             Globals.myclient.requestSessionList(Globals.tags, this);
+            /*
             Intent iin= getIntent();
             Bundle b = iin.getExtras();
             if(b!=null)
@@ -42,13 +42,13 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
                // Toast.makeText(getApplicationContext(), "username is " + username ,Toast.LENGTH_SHORT).show();
 
             }
+            */
         }
         catch(Exception e){
 
         }
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -89,12 +89,12 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
     @Override
     public void onReceiveSessionList(final List<CollabrifySession> sessionList)
     {
-        System.out.println("Receiving SEssion List in Student Activity");
-
+        System.out.println("Receiving Session List in Student Activity");
+        //Toast.makeText(getApplicationContext(), "" + Globals.myclient.currentSessionParticipantId(), Toast.LENGTH_SHORT).show();
         if( sessionList.isEmpty())
         {
             System.out.println("No Session Available using Tags"+ Globals.tags.get(0));
-//            Log.i("CCO", "No Session Available using Tags: " + clientListener.tags.get(0));
+//            Log.i("CCO", "No Session Available using Tags: " + clientListener.tags.get(0));...........
 //            runOnUiThread(new Runnable()
 //            {
 //                @Override
@@ -115,21 +115,19 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Choose a session").setItems(
+        builder.setTitle("Choose a session");
+        builder.setItems(
                 sessionNames.toArray(new String[sessionList.size()]),
                 new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        try
-                        {
+                        try {
                             sessionId = sessionList.get(which).id();
                             sessionName = sessionList.get(which).name();
                             Globals.myclient.joinSession(sessionId, null, StudentJoinActivity.this);
-
-                        }
-                        catch( Exception e)
-                        {
+                        } catch (Exception e) {
+                            System.out.println( "session not joined");
                             Log.i("CCO", "Join Session Failed", e);
                             finish();
                         }
@@ -165,9 +163,12 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 
     @Override
     public void onSessionJoined(CollabrifySession collabrifySession) {
+        // After join the session successfully, set some variables in Globals
         Globals.mysession = collabrifySession;
+        Globals.selfId = Globals.myclient.currentSessionParticipantId();
         Intent intent = new Intent(this, StudentPlayActivity.class);
-        intent.putExtra(EXTRA_MESSAGE, username);
+        //intent.putExtra(EXTRA_MESSAGE, username);
+
         startActivity(intent);
         finish();
     }
