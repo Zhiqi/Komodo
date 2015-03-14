@@ -70,8 +70,10 @@ public class StudentBroadcastListener {
 
     // When two devices are touched, broadcast a touch message into session
     public void detectedDevice(short minor) {
+        System.out.println("@@@enter detectedDevice()");
+
         boolean inIncubation = incubationTimer > 0 && !incubationCompleted;
-        long timestamp = System.currentTimeMillis();
+        long timestamp = Math.round((double)System.currentTimeMillis() /1000);
         TouchMessage msg =  new TouchMessage();
         msg.initWithInfected(infected, inIncubation, Globals.selfId, Globals.playerMinors.get(minor), timestamp);
         broadcast(msg.outputBuffer(), "Touch");

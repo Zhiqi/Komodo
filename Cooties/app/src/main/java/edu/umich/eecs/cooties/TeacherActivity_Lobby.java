@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
@@ -113,7 +114,6 @@ public class TeacherActivity_Lobby extends Activity implements AdapterView.OnIte
         try{
             Globals.myclient.leaveSession(true, this);
         }
-
         catch(Exception e){
 
         }
@@ -145,11 +145,17 @@ public class TeacherActivity_Lobby extends Activity implements AdapterView.OnIte
 
     @Override
     public void onDisconnect() {
+        runOnUiThread(new Runnable() {
+                          public void run() {
+                              Toast.makeText(getApplicationContext(), "Session destroyed", Toast.LENGTH_SHORT).show();
+                          }
+                      });
 
-    }
+            System.out.println("destroy session complete");
+        }
 
-    @Override
+        @Override
     public void onError(CollabrifyException e) {
-
+        System.out.println("destroy session error");
     }
 }

@@ -11,8 +11,8 @@ public class HistoryItem {
 
     public HistoryItem(long timestamp1, PlayerInfo firstUser1, PlayerInfo secondUser1){
         timestamp = timestamp1;
-        firstUser = firstUser;
-        secondUser = secondUser;
+        firstUser = firstUser1;
+        secondUser = secondUser1;
     }
 
     boolean isEqual(HistoryItem object) {
@@ -31,5 +31,9 @@ public class HistoryItem {
 
     void decrement(){
         numItems--;
+    }
+
+    void increment(){
+        numItems++;
     }
 }

@@ -33,9 +33,14 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
         //Intent intent = getIntent();
 
         //can ignore this if using Globals structure
-        String username = Globals.username;
-
-        Toast.makeText(getApplicationContext(), "Entered with username: "+username, Toast.LENGTH_LONG).show();
+        final String username = Globals.username;
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(getApplicationContext(), "Entered with username: "+username, Toast.LENGTH_LONG).show();
+            }
+        });
 
 
     }

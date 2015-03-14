@@ -25,10 +25,11 @@ import org.altbeacon.beacon.Region;
 import java.util.Arrays;
 import java.util.Collection;
 
+import edu.umich.imlc.collabrify.client.CollabrifyListener;
+import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
-public class StudentPlayActivity extends Activity implements BeaconConsumer {
 
-    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+public class StudentPlayActivity extends Activity implements BeaconConsumer, CollabrifyListener.CollabrifyLeaveSessionListener{
 
     private BeaconManager beaconManager;
     private BeaconTransmitter beaconTransmitter;
@@ -37,9 +38,27 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
     private SearchBeacon searchBeacon; // select matched device
 
     @Override
+    public void onDisconnect() {
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(getApplicationContext(), "Leave Session", Toast.LENGTH_SHORT).show();
+            }
+        });
+        System.out.println("Leave Session");
+    }
+
+    @Override
+    public void onError(CollabrifyException e) {
+        System.out.println("Leave session error"+e.toString());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_play);
+        Globals.studentPlayActivity = this;
         verifyBluetooth();
 
         broadcastListener = new StudentBroadcastListener();
@@ -110,20 +129,18 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
 
     @Override
     public void onBeaconServiceConnect() {
-        Toast.makeText(getApplicationContext(), "Beacon service connected:", Toast.LENGTH_SHORT).show();
-
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(getApplicationContext(), "Beacon service connected:", Toast.LENGTH_SHORT).show();
+            }
+        });
         beaconManager.setRangeNotifier(new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 if (beacons.size() > 0) {
-                    logToDisplay("@@@@@number of beacons detected is: " + beacons.size());
                     searchBeacon.beacons(beacons);
-                    /*
-                    Beacon [] beaconArr = beacons.toArray(new Beacon[beacons.size()]);
-                    for(Beacon beacon : beaconArr) {
-                        logToDisplay("Beacon with name " + beacon.getId3() + " is about " + beacon.getRssi() + " meters away.");
-                    }
-                    */
                 }
             }
 
@@ -137,7 +154,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
         runOnUiThread(new Runnable() {
             public void run() {
                 EditText editText = (EditText)StudentPlayActivity.this
-                        .findViewById(R.id.rangingText);
+                        .findViewById(R.id.meetHistory);
                 editText.append(line+"\n");
             }
         });
@@ -152,7 +169,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
 
         int result = BeaconTransmitter.checkTransmissionSupported(getApplicationContext());
         if(result == BeaconTransmitter.SUPPORTED) {
-            Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
                     .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
@@ -168,12 +185,18 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
             //beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
             //beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
             System.out.println("transmit iBeacon start:" + beaconTransmitter.isStarted());
-            Toast.makeText(getApplicationContext(), "transmit iBeacon start:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "transmit iBeacon start:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
             AdvertiseCallback callback = new AdvertiseCallback() {
                 @Override
                 public void onStartSuccess(AdvertiseSettings settingsInEffect) {
                     super.onStartSuccess(settingsInEffect);
-                    Toast.makeText(getApplicationContext(), "transmit iBeacon start:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            Toast.makeText(getApplicationContext(), "transmit iBeacon start: " + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             };
             beaconTransmitter.startAdvertising(beacon, callback);
@@ -184,7 +207,13 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
                 || result == BeaconTransmitter.NOT_SUPPORTED_BLE
                 || result == BeaconTransmitter.NOT_SUPPORTED_MULTIPLE_ADVERTISEMENTS
                 || result == BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER){
-            Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
     }
@@ -193,7 +222,22 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer {
         if(beaconTransmitter != null){
             beaconTransmitter.stopAdvertising();
             beaconTransmitter = null;
-            Toast.makeText(getApplicationContext(), "Beacon Off", Toast.LENGTH_SHORT).show();
+            runOnUiThread(new Runnable()
+            {
+                public void run()
+                {
+                    Toast.makeText(getApplicationContext(), "Beacon Off", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    public void leaveSession(View view) {
+        try {
+            Globals.myclient.leaveSession(false, this);
+        }
+        catch(Exception e) {
+
         }
     }
 

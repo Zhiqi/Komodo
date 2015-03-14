@@ -1,5 +1,7 @@
 package edu.umich.eecs.cooties;
 
+import android.widget.EditText;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -55,9 +57,11 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
             printPlayerList();
         }
         else if(eventType.equals("Touch")) {
+
             TouchMessage msg = new TouchMessage();
             msg.initWithBuffer(data);
             touchEventHelper(msg);
+            System.out.println("@@@Touch message received, sent by Player " +msg.sourceUserId);
         }
         /*
         else if([eventType isEqualToString:@"StopSim"]) {
@@ -88,38 +92,6 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
         */
 
 
-    /*
-        if(collabrifyEvent.type() == "initialSettings"){
-            BaseFileMessage msg = new BaseFileMessage();
-            msg.initWithBuffer(collabrifyEvent.data());
-        }
-        else if(collabrifyEvent.type() == "PlayerAnnounce"){
-            PlayerAnnounceMessage msg = new PlayerAnnounceMessage();
-            msg.initWithBuffer(collabrifyEvent.data());
-
-        }
-        else if(collabrifyEvent.type() == "Touch"){
-            TouchMessage msg = new TouchMessage();
-            msg.initWithBuffer(collabrifyEvent.data());
-
-        }
-        else if(collabrifyEvent.type() == "StopSim"){
-
-        }
-        else if(collabrifyEvent.type() == "Restart"){
-
-        }
-        else if(collabrifyEvent.type() == "ShowMeetingRank"){
-
-        }
-        else if(collabrifyEvent.type() == "HideMeetingRank"){
-
-        }
-        else{
-            //unrecognized event type
-        }
-*/
-
     }
 
     // get a new user
@@ -128,13 +100,13 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
         short minor = participant.minor;
         if(Globals.playerMinors.containsKey(minor) == false) {
             Globals.playerMinors.put(minor, playerId);
-
+            Globals.logUsernameToDisplay(participant.displayName);
             PlayerInfo player = new PlayerInfo();
             player.name = participant.displayName;
             player.playerId = playerId;
             player.minor = minor;
             player.left = false;
-            Globals.playerInfo.put(minor, player);
+            Globals.playerInfo.put(playerId, player);
             /*
             if([self.delegate respondsToSelector:@selector(participantJoined:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -156,7 +128,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
         final long timeUntilNextAllowedConnectAfterConnect = 30;
 
         //after an event is received, prevent another connection for 30 seconds
-        Globals.lastSend.put(minor, System.currentTimeMillis() + timeUntilNextAllowedConnectAfterConnect*1000);
+        Globals.lastSend.put(minor, Math.round((double)System.currentTimeMillis()/1000) + timeUntilNextAllowedConnectAfterConnect);
     }
 
     void touchEventHelper(TouchMessage msg){
@@ -187,6 +159,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
 
                 // The block can only be run on only one thread for any given time
                     HistoryItem historyItem = new HistoryItem(msg.timestamp, firstPlayer, secondPlayer);
+                    historyItem.increment();
 
                     if(Globals.historyList.contains(historyItem)) {
                         //History item records how many are created.  If history list already contains it, then subtract
@@ -194,7 +167,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
                     }
                     else {
                         Globals.historyList.add(historyItem);
-
+                        Globals.logMeetingToDisplay(historyItem.firstUser.name + " and " + historyItem.secondUser.name + " meet at " + historyItem.timestamp);
                         if(msg.sourceUserId == Globals.selfId || touch.sourceUserId == Globals.selfId) {
                             short targetMinor;
                             if(firstPlayer.playerId == Globals.selfId) {
@@ -204,7 +177,11 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
                                 targetMinor = firstPlayer.minor;
                             }
                             receivedEventFrom(targetMinor);
-
+                            /*
+                            for (HistoryItem HI : Globals.historyList){
+                                System.out.println("@@@Player " + HI.firstUser.name + " and Player " + HI.secondUser.name + " meet at " + HI.timestamp);
+                            }
+                            */
                             /*
                             bool newlyInfected = false;
                             if(!self.infected && (infection == HMCFirstUser || infection == HMCSecondUser)) {
@@ -226,6 +203,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
                         }
                     }
             }
+
         }
 
     }
@@ -263,8 +241,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
     // just for debug
     private void printPlayerList(){
         System.out.println("@@@number of players in the session is:" + Globals.playerInfo.size());
-        for (short key: Globals.playerInfo.keySet()) {
-            System.out.println(key +":" + Globals.playerInfo.get(key).name);
+        for (long key: Globals.playerInfo.keySet()) {
+            System.out.println(key +":" + Globals.playerInfo.get(key).name +":id is:"+Globals.playerInfo.get(key).playerId);
         }
     }
 }

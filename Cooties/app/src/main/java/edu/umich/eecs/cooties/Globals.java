@@ -1,5 +1,8 @@
 package edu.umich.eecs.cooties;
 
+import android.app.Activity;
+import android.widget.EditText;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -24,7 +27,7 @@ public class Globals {
                                     set in StudentJoinActivity */
     public static Hashtable<Short, Long> playerMinors = new Hashtable<Short, Long>(); /* key: minor value: userId (participant id)
                                                             */
-    public static Hashtable<Short, PlayerInfo> playerInfo = new Hashtable<Short, PlayerInfo>(); /* key: minor value; value: playerInfo
+    public static Hashtable<Long, PlayerInfo> playerInfo = new Hashtable<Long, PlayerInfo>(); /* key: userId (participant id); value: playerInfo
                                                                */
     public static Hashtable<Short, Long> lastSend = new Hashtable<Short, Long>(); // key: minor, value: timestamp;
     public static Hashtable<Short, Long> rangedBeacons = new Hashtable<Short, Long>(); // key: minor, value: timestamp
@@ -36,6 +39,26 @@ public class Globals {
     public static short stickyMinor;
 
     public static List<String> tags = Arrays.asList("tag61");
+    public static Activity studentPlayActivity;
+
+    public static void logUsernameToDisplay(final String line) {
+        Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                EditText editText = (EditText) Globals.studentPlayActivity
+                        .findViewById(R.id.rangingText);
+                editText.append(line + "\n");
+            }
+        });
+    }
+    public static void logMeetingToDisplay(final String line) {
+        Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                EditText editText = (EditText) Globals.studentPlayActivity
+                        .findViewById(R.id.meetHistory);
+                editText.append(line + "\n");
+            }
+        });
+    }
 
 }
 
