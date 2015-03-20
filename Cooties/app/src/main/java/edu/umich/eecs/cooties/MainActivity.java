@@ -2,7 +2,6 @@ package edu.umich.eecs.cooties;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +43,7 @@ public class MainActivity extends Activity {
 
     public void login(View view) {
         // Do something in response to button
-        Intent intent = new Intent(this, TeacherActivity_Initialize.class);
+        Intent intent = new Intent(this, TeacherActivity_1_Initialize.class);
         EditText editText = (EditText) findViewById(R.id.edit_message);
         String username = editText.getText().toString();
 
@@ -57,7 +56,7 @@ public class MainActivity extends Activity {
         }
 
         if (username.equals("T")) {
-            intent = new Intent(this, TeacherActivity_Initialize.class);
+            intent = new Intent(this, TeacherActivity_1_Initialize.class);
         }
         else {
             intent = new Intent(this, StudentJoinActivity.class);

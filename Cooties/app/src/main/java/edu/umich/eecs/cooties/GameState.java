@@ -12,8 +12,13 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 /**
  * Created by mtkliema on 3/10/15.
+ * Serves as Collabrify Callback
+ * Accessed through Globals.model
  */
-public class GameState implements CollabrifyListener.CollabrifySessionListener {
+public class GameState implements CollabrifyListener.CollabrifySessionListener, CollabrifyListener.CollabrifyBroadcastListener {
+
+
+
 
     @Override
     public void onBaseFileUploadComplete(long l) {
@@ -30,13 +35,24 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
     //similar to HMCTouchBeaconEngine.m:collabrifyReceivedEvent
     @Override
     public void onReceiveEvent(CollabrifyEvent event) {
+
+        System.out.println("Receiving Collabrify event in GameState:" +event.type());
         String eventType = event.type();
         byte[] data = event.data();
 
         if(eventType.equals("initialSettings")){
             BaseFileMessage msg = new BaseFileMessage();
             msg.initWithBuffer(data);
-            // Set beacon majorsaq
+
+            Globals.major = msg.ibeaconMajor;
+            Globals.infected_user_ids = msg.infectedUserId;
+            Globals.incubation_time = msg.incubationTime;
+            Globals.hide_health_status = msg.hideHealthStatus;
+            if(Globals.infected_user_ids.contains(Globals.selfId)){
+                Globals.infected_status = true;
+            }
+
+                                             // Set beacon majorsaq
             //[self.beaconManager setMajor:[[NSNumber alloc] initWithInt:msg.ibeaconMajor]];
             //incubationTimer = msg.incubationTime;
             //infected = msg.infectedUserId.contains(selfId);
@@ -46,6 +62,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
         else if(eventType.equals("PlayerAnnounce")){
             PlayerAnnounceMessage msg = new PlayerAnnounceMessage();
             msg.initWithBuffer(data);
+            System.out.println("Received Player Announce Message for:" + msg.displayName);
+
             acquiredNewParticipant(msg);
             /*
             if(msg.user_id == Globals.selfId) {
@@ -60,6 +78,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
 
             TouchMessage msg = new TouchMessage();
             msg.initWithBuffer(data);
+
             touchEventHelper(msg);
             System.out.println("@@@Touch message received, sent by Player " +msg.sourceUserId);
         }
@@ -131,8 +150,11 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
         Globals.lastSend.put(minor, Math.round((double)System.currentTimeMillis()/1000) + timeUntilNextAllowedConnectAfterConnect);
     }
 
+    //called on receipt of touch msg - finds corresponding events in history
     void touchEventHelper(TouchMessage msg){
         CheckTouch checkTouch = new CheckTouch();
+
+        //obtain corresponding messages already received with same users during approximate time
         ArrayList<TouchMessage> foundEvents = checkTouch.bumpEvents(msg);
 
         if(foundEvents.size() > 0) {
@@ -176,6 +198,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
                             else {
                                 targetMinor = firstPlayer.minor;
                             }
+
+                            //prevent interactions for 30 seconds - may not be accurate if an app joins late and receives a bunch of prior messages
                             receivedEventFrom(targetMinor);
                             /*
                             for (HistoryItem HI : Globals.historyList){
@@ -211,12 +235,14 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
     @Override
     public void onParticipantJoined(CollabrifyParticipant collabrifyParticipant) {
         System.out.println("collabrify participant joined:" + collabrifyParticipant.getDisplayName());
+        Globals.active_players.put(collabrifyParticipant.getId(),collabrifyParticipant.getDisplayName());
 
     }
 
     @Override
     public void onParticipantLeft(CollabrifyParticipant collabrifyParticipant) {
         System.out.println(collabrifyParticipant.getDisplayName() + " has Left!");
+        Globals.active_players.remove(collabrifyParticipant.getId());
 
     }
 
@@ -244,5 +270,10 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
         for (long key: Globals.playerInfo.keySet()) {
             System.out.println(key +":" + Globals.playerInfo.get(key).name +":id is:"+Globals.playerInfo.get(key).playerId);
         }
+    }
+
+    @Override
+    public void onBroadcastDone(CollabrifyEvent collabrifyEvent) {
+
     }
 }

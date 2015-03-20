@@ -6,17 +6,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CheckBox;
 
 
-public class TeacherActivity_In_Game_Lobby extends Activity {
+public class TeacherActivity_3_In_Game_Lobby extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_activity__in__game__lobby);
+        setContentView(R.layout.activity_teacher_activity_3);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -32,6 +30,7 @@ public class TeacherActivity_In_Game_Lobby extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
@@ -42,7 +41,7 @@ public class TeacherActivity_In_Game_Lobby extends Activity {
 
 
     public void showStudents(View view) {
-        Intent intent = new Intent(this, TeacherActivity_List.class);
+        Intent intent = new Intent(this, TeacherActivity_4_Student_List.class);
 
         startActivity(intent);
 

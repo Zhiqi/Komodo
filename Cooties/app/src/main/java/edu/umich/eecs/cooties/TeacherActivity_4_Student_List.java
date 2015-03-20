@@ -7,23 +7,36 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 
-public class TeacherActivity_List extends Activity {
+
+public class TeacherActivity_4_Student_List extends Activity {
+
+    ArrayList<String> active_players = new ArrayList<String>();
+    private ListView players_list = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_activity_list);
-
-        String[] codeLearnChapters = new String[] { "alpha", "beta", "charlie", "delta", "epsilon"};
-
-        ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, codeLearnChapters);
-        ListView codeLearnLessons = (ListView)findViewById(R.id.listView);
-        codeLearnLessons.setAdapter(codeLearnArrayAdapter);
-
+        setContentView(R.layout.activity_teacher_activity_4);
+        players_list = (ListView)findViewById(R.id.listView);
+        for(String a : Globals.active_players.values()){
+            active_players.add(a);
+        }
+        System.out.println("Found " + Globals.active_players.size() + " students");
+        ArrayAdapter<String> active_players_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, active_players);
+        players_list.setAdapter(active_players_adapter);
 
     }
 
+    protected void onStop(){
+        super.onStop();
+        finish();
+    }
+
+//    public void add_additional_player(String new_player){
+//        active_players.add(new_player);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -14,13 +14,16 @@ import edu.umich.eecs.cooties.PlayerInfo;
  * Created by luke on 3/10/15.
  */
 
+//broadcasts player information and device detection information
 public class StudentBroadcastListener {
 
     CollabrifyListener.CollabrifyBroadcastListener listen;
     int incubationTimer;
     boolean incubationCompleted;
-    boolean infected;
+//    boolean infected;
 
+
+    //called by both searchBeacon and studentPlayActivity
     public StudentBroadcastListener() {
 
         listen = new CollabrifyListener.CollabrifyBroadcastListener() {
@@ -36,6 +39,7 @@ public class StudentBroadcastListener {
         };
     }
 
+    //called by studentplayactivity:oncreate
     // announce player himself when joining a session
     // return a minor value which will be used for beacon creation
     public String announcePlayer() {
@@ -56,6 +60,7 @@ public class StudentBroadcastListener {
         Globals.myclient.broadcast(data, eventType, listen);
     }
 
+    //called by announceplayer -> returned to StudentPlayActivity:onCreate for setting up bluetooth beacon
     // create a new minor for beacon
     private short newMinor(long playerId) {
         short minor = (short)(playerId % Short.MAX_VALUE);
@@ -68,6 +73,8 @@ public class StudentBroadcastListener {
         return minor;
     }
 
+
+    //called by searchbeacon:scanForSignificantConnection()
     // When two devices are touched, broadcast a touch message into session
     public void detectedDevice(short minor) {
         System.out.println("@@@enter detectedDevice()");
@@ -75,7 +82,7 @@ public class StudentBroadcastListener {
         boolean inIncubation = incubationTimer > 0 && !incubationCompleted;
         long timestamp = Math.round((double)System.currentTimeMillis() /1000);
         TouchMessage msg =  new TouchMessage();
-        msg.initWithInfected(infected, inIncubation, Globals.selfId, Globals.playerMinors.get(minor), timestamp);
+        msg.initWithInfected(Globals.infected_status, inIncubation, Globals.selfId, Globals.playerMinors.get(minor), timestamp);
         broadcast(msg.outputBuffer(), "Touch");
 
         /*

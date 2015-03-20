@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TeacherActivity_Initialize"
+            android:name=".TeacherActivity_1_Initialize"
             android:label="@string/title_activity_teacher_initialze" >
         </activity>
         <activity
@@ -34,15 +34,15 @@
             android:label="@string/title_activity_student_play" >
         </activity>
         <activity
-            android:name=".TeacherActivity_List"
+            android:name=".TeacherActivity_4_Student_List"
             android:label="@string/title_activity_teacher_activity__list">
         </activity>
         <activity
-            android:name=".TeacherActivity_Lobby"
+            android:name=".TeacherActivity_2_Pre_Lobby"
             android:label="@string/title_activity_teacher_activity__lobby" >
         </activity>
         <activity
-            android:name=".TeacherActivity_In_Game_Lobby"
+            android:name=".TeacherActivity_3_In_Game_Lobby"
             android:label="@string/title_activity_teacher_activity__in__game__lobby" >
         </activity>
     </application>

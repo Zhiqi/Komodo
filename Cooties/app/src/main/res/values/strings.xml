@@ -19,6 +19,8 @@
     <!--Teacher Activity-->
     <string name="sessionName">Enter a session name here</string>
     <string name="create">create</string>
+    <string name="infected_users">Select 1 or More Initial Infected Users.\nLeave Blank for Random. </string>
+    <string name="show_infection_status">Hide Infection Status from Players?</string>
 
     <!--Student Play Activity-->
 

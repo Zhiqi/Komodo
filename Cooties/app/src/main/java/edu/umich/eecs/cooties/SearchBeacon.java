@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Collections;
 
 
+//Searches
 public class SearchBeacon {
 
     StudentBroadcastListener listener;
@@ -17,6 +18,7 @@ public class SearchBeacon {
         listener = new StudentBroadcastListener();
     }
 
+    //called by beacons - notifies Broadcastlistener of any significant matchs for broadcast
     private void scanForSignificantConnection() {
         System.out.println("@@@enter scanForSignificantConnection() ");
 
@@ -41,6 +43,8 @@ public class SearchBeacon {
 
     }
 
+
+    //add and search received beacons for any significant connections
     public void beacons(Collection<Beacon> beacons) {
         System.out.println("@@@enter beacons() ");
 

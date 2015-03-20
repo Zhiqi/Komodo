@@ -3,21 +3,20 @@ package edu.umich.eecs.cooties;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
-import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
-public class TeacherActivity_Initialize extends Activity implements CollabrifyListener.CollabrifyCreateSessionListener {
+public class TeacherActivity_1_Initialize extends Activity implements CollabrifyListener.CollabrifyCreateSessionListener {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +28,7 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 //        textView.setText(message);
 //        setContentView(textView);
 
-        setContentView(R.layout.activity_teacher_initialize);
+        setContentView(R.layout.activity_teacher_1);
         //Intent intent = getIntent();
 
         //can ignore this if using Globals structure
@@ -80,7 +79,7 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
 
         try {
             System.out.println("Placeholder for create session");
-            Globals.myclient.createSession(sessionName,Globals.tags,null,0,true,this);
+            Globals.myclient.createSession(sessionName, Globals.tags, null, 0, true, this);
 
         }
         catch(Exception a){
@@ -104,7 +103,7 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
         Globals.mysession = session;
         System.out.println("session created with id"+Globals.mysession.id());
 
-        Intent intent = new Intent(this, TeacherActivity_Lobby.class);
+        Intent intent = new Intent(this, TeacherActivity_2_Pre_Lobby.class);
 
         startActivity(intent);
         finish();

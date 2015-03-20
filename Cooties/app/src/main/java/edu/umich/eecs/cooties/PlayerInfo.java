@@ -7,5 +7,5 @@ public class PlayerInfo {
     public String name;
     public long playerId;
     public short minor;
-    public boolean left;
+    public boolean left; //still in the game?
 }

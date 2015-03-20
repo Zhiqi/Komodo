@@ -1,0 +1,82 @@
+
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:gravity="center"
+android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Incubation Time"
+        android:id="@+id/textView"
+        />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:spinnerMode="dropdown"
+        android:padding="24dp"
+
+        />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/show_infection_status"
+        android:id="@+id/show_infection_checkBox"
+        android:checked="true"
+        android:onClick="onCheckboxClicked"
+        android:layout_below="@+id/spinner"
+         />
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/infected_users"
+        android:id="@+id/button8"
+        android:layout_below="@+id/show_infection_checkBox"
+        android:padding="24dp"
+
+        android:onClick="infected_user_selection" />
+
+
+
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start Simulation"
+        android:id="@+id/button3"
+        android:clickable="true"
+        android:layout_gravity="center_vertical"
+        android:onClick="startSimulation" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel Simulation"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/button4"
+        android:onClick="cancelSimulation" />
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>

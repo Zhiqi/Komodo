@@ -34,25 +34,11 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
     private BeaconManager beaconManager;
     private BeaconTransmitter beaconTransmitter;
     private String minor;
+
     private StudentBroadcastListener broadcastListener; // use this for broadcast
+
     private SearchBeacon searchBeacon; // select matched device
 
-    @Override
-    public void onDisconnect() {
-        runOnUiThread(new Runnable()
-        {
-            public void run()
-            {
-                Toast.makeText(getApplicationContext(), "Leave Session", Toast.LENGTH_SHORT).show();
-            }
-        });
-        System.out.println("Leave Session");
-    }
-
-    @Override
-    public void onError(CollabrifyException e) {
-        System.out.println("Leave session error"+e.toString());
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +77,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         return super.onOptionsItemSelected(item);
     }
 
+
     private void verifyBluetooth() {
 
         try {
@@ -127,6 +114,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         }
     }
 
+    //callback for beacon receiver initialization - specifies how received beacons are handled and begins receives
     @Override
     public void onBeaconServiceConnect() {
         runOnUiThread(new Runnable()
@@ -140,6 +128,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
                 if (beacons.size() > 0) {
+
+                    //add and search received beacons for any significant connections
                     searchBeacon.beacons(beacons);
                 }
             }
@@ -162,6 +152,16 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
 
     public void startBLE(View view) {
 
+        //Verify receipt of basemsg
+        if(Globals.major == 0){
+            Toast.makeText(getApplicationContext(), "FAIL! \nHaven't received basefile yet", Toast.LENGTH_LONG).show();
+
+            return;
+        }
+
+
+
+
         if(beaconTransmitter != null){
             //bluetooth may be off
             return;
@@ -172,8 +172,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
-                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2("12345")
+                    .setId1(Globals.uuid)
+                    .setId2(String.valueOf(Globals.major))
                     .setId3(minor)
                     .setManufacturer(0x4c00)
                     .setTxPower(-59)
@@ -211,7 +211,9 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             {
                 public void run()
                 {
-                    Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_LONG).show();
+                    finish();
+
                 }
             });
         }
@@ -239,6 +241,29 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         catch(Exception e) {
 
         }
+    }
+
+    @Override
+    public void onDisconnect() {
+        runOnUiThread(new Runnable()
+        {
+            public void run()
+            {
+                Toast.makeText(getApplicationContext(), "You have left the session", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+        System.out.println("Leave Session");
+    }
+
+    @Override
+    public void onError(CollabrifyException e) {
+        System.out.println("Leave session error"+e.toString());
+    }
+
+    @Override
+    public void onStop(){
+
     }
 
 }

@@ -9,17 +9,17 @@ import java.util.*;
 public class BaseFileMessage {
     // List of infected user id
     public ArrayList<Long> infectedUserId = new ArrayList<Long>();
-    public int incubationTime = 0;
+    public long incubationTime = 0;
     public int ibeaconMajor = 0;
-    public int hideHealthStatus = 1; // 1 for true and 0 for false
+    public long hideHealthStatus = 1; // 1 for true and 0 for false
     BaseFile1 baseFile;
 
     // Creat a protobuf into collabrify
-    public BaseFile1 initWithInfectedUser(ArrayList<Long> userId, int incTime, int major, int hideHealthStatus) {
+    public BaseFile1 initWithInfectedUser(ArrayList<Long> userId, long incTime, int major, long hideHealthStatus) {
         BaseFile1.Builder baseFile1 = BaseFile1.newBuilder();
 
         for(int i = 0; i < userId.size(); i++) {
-            baseFile1.setInfectedUserId(i, userId.get(i));
+            baseFile1.addInfectedUserId(userId.get(i));
         }
         baseFile1.setIbeaconMajor(major);
         baseFile1.setIncubationTimer(incTime);
@@ -29,8 +29,8 @@ public class BaseFileMessage {
 
         ibeaconMajor = baseFile.getIbeaconMajor();
         infectedUserId = userId;
-        hideHealthStatus = (int)baseFile.getHideHealthStatus();
-        incubationTime = (int)baseFile.getIncubationTimer();
+        hideHealthStatus = baseFile.getHideHealthStatus();
+        incubationTime = baseFile.getIncubationTimer();
 
         return baseFile;
     }
