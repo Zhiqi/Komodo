@@ -25,15 +25,23 @@ public class TeacherActivity_4_Student_List extends Activity {
 
 
         players_list = (ListView)findViewById(R.id.listView);
-        for(Long a : Globals.playerInfo.keySet()){
+
+        if(Globals.playerInfo.isEmpty()){
+            active_players.add("No Playerinfo Received");
+
+        }
+        else{
+            for(Long a : Globals.playerInfo.keySet()){
 
 
-            if(Globals.infected_status_by_player.get(a) == true){
-                active_players.add(Globals.playerInfo.get(a).name + ":\tINFECTED");
+                if(Globals.infected_status_by_player.get(a) == true){
+                    active_players.add(Globals.playerInfo.get(a).name + ":\tINFECTED");
+                }
+                else{
+                    active_players.add(Globals.playerInfo.get(a).name+":\tNOT INFECTED");
+                }
             }
-            else{
-                active_players.add(Globals.playerInfo.get(a).name+":\tNOT INFECTED");
-            }
+
         }
         Toast.makeText(getApplicationContext(), "Found " + Globals.playerInfo.size() + " students", Toast.LENGTH_LONG ).show();
         System.out.println("Found " + Globals.playerInfo.size() + " students");

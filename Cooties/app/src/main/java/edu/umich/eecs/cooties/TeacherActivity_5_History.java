@@ -18,8 +18,14 @@ public class TeacherActivity_5_History extends Activity {
         setContentView(R.layout.activity_teacher_5_history);
 
         ArrayList<String> historyList = new ArrayList<String>();
-        for (HistoryItem k : Globals.historyList){
-            historyList.add(k.firstUser.name  + " and " + k.secondUser.name +" meet at " + k.timestamp); // + " ; participant id is " + String.valueOf(k));
+        if(Globals.historyList.isEmpty()){
+            historyList.add("No Meetings Yet");
+        }
+        else{
+            for (HistoryItem k : Globals.historyList){
+                historyList.add(k.firstUser.name  + " and " + k.secondUser.name +" meet at " + k.timestamp); // + " ; participant id is " + String.valueOf(k));
+            }
+
         }
 
         ArrayAdapter<String> historyArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, historyList);

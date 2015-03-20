@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -88,6 +89,9 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_2);
+
+        TextView tv = (TextView) findViewById(R.id.textView2);
+        tv.setText("Session Name: "+Globals.mysession.name());
 
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
