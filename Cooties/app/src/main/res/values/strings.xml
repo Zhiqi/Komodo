@@ -33,6 +33,9 @@
             <item>2 minute</item>
             <item>5 minute</item>
         </string-array>
+    <string name="title_activity_student__intersitital__activity_2">
+        Student_Intersitital_Activity_2
+    </string>
 
 
 

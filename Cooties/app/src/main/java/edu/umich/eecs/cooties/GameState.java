@@ -26,6 +26,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
     @Override
     public void onBaseFileReceived(File file) {
+
         System.out.println("@@@basefile received ");
 
     }
@@ -58,10 +59,20 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
             }
 
+
+
+
             System.out.println("Received Basefile  Message");
             System.out.println("Major is "+Globals.major);
             System.out.println("Incubation Time is "+ Globals.incubation_time);
             System.out.println("Hide health status is "+Globals.hide_health_status);
+
+            Globals.base_received = true;
+
+            if(Globals.interstitial_wait != null)
+            {
+                Globals.interstitial_wait.lets_go();
+            }
 
             // Set beacon majorsaq
             //[self.beaconManager setMajor:[[NSNumber alloc] initWithInt:msg.ibeaconMajor]];
@@ -106,6 +117,13 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
 
         }
+        else if(eventType.equals("StopSim")) {
+            //disable beacons
+        }
+        else if(eventType.equals("Restart")) {
+
+        }
+
         /*
         else if([eventType isEqualToString:@"StopSim"]) {
             [self turnOffBeacons];

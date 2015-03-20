@@ -135,7 +135,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         // After join the session successfully, set some variables in Globals
         Globals.mysession = collabrifySession;
         Globals.selfId = Globals.myclient.currentSessionParticipantId();
-        Intent intent = new Intent(this, StudentPlayActivity.class);
+        Intent intent = new Intent(this, Student_Intersitital_Activity_2.class);
 
         startActivity(intent);
         finish();

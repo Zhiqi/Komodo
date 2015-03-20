@@ -7,6 +7,7 @@ import android.bluetooth.le.AdvertiseSettings;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import org.altbeacon.beacon.BeaconConsumer;
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
+import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
 
@@ -44,6 +46,31 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_play);
         Globals.studentPlayActivity = this;
+
+
+
+
+        //NEED TO WAIT UNTIL THIS THREAD HAS BASEFILE BROADCAST MESSAGE BEFORE STARTING,
+        //BECAUSE ORDER SHOULD BE LIKE THIS
+        //TEACHER INITIALIZE
+        //THEN STUDENT JOIN SESSION
+        //THEN TEACHER PICK PARAMETERS AND SEND
+        //THEN STUDENTS CAN START PLAYING
+
+//        while(true){
+//            try{
+//                Thread.sleep(1000);
+//                if()
+//
+//            }
+//            catch(Exception e){
+//                log.e("SPA", "Sleep Exception")
+//            }
+//
+//        }
+
+
+
         verifyBluetooth();
 
         broadcastListener = new StudentBroadcastListener();
@@ -135,8 +162,20 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
 
         });
         try {
-            beaconManager.startRangingBeaconsInRegion(new Region("myRangingUniqueId",null,null,null));
-        } catch (RemoteException e) {   }
+
+            Identifier uuid = Identifier.parse(Globals.bt_uuid.toString());
+            Identifier maj = Identifier.fromInt(Globals.major);
+            Identifier min = Identifier.fromInt(Integer.parseInt(minor));
+            Log.d("SPA", "Beacon Service Beacon Range ");
+            Log.d("SPA", "uuid is "+uuid.toUuidString());
+            Log.d("SPA", "maj is "+maj.toString());
+            Log.d("SPA", "min is "+min.toString());
+
+            beaconManager.startRangingBeaconsInRegion(new Region("myApplicationRanger", uuid, maj, min));
+//                    new Region("myRangingUniqueI",null),null,null)
+        } catch (RemoteException e) {
+        Log.e("SPA", "Beacon Service Connect Start Ranging error", e);
+        }
     }
 
     private void logToDisplay(final String line) {
@@ -171,7 +210,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
-                    .setId1(Globals.uuid)
+                    .setId1(Globals.bt_uuid.toString())
                     .setId2(String.valueOf(Globals.major))
                     .setId3(minor)
                     .setManufacturer(0x4c00)
@@ -264,7 +303,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
 
     @Override
     public void onStop(){
-
+        super.onStop();
     }
 
 }

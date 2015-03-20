@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.UUID;
 
 import edu.umich.imlc.collabrify.client.CollabrifyClient;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
@@ -25,8 +26,8 @@ public class Globals {
     public static long selfId; /* participant id set in StudentJoinActivity */
 
     public static Activity studentPlayActivity = null;
-
-
+    public static Student_Intersitital_Activity_2 interstitial_wait = null;
+    public static Boolean base_received = false;
 
 
 
@@ -78,7 +79,7 @@ public class Globals {
     //major included in basefile message
     //could set independ. based on session id
     public static int major = 0;
-    public static final String uuid = "F52333CA-84EA-4FE7-9192-1EE0FCE480E9";
+    public static final UUID bt_uuid = UUID.fromString("f52333ca-84ea-4fe7-9192-1ee0fce480e9");
 
     // key: minor, value: timestamp;
     // Set/checked in scanForSignficantConnection , beacons ()
@@ -98,13 +99,17 @@ public class Globals {
         if (username.equals(TEACHER_NAME)) {
         }
         else {
-            Globals.studentPlayActivity.runOnUiThread(new Runnable() {
-                public void run() {
-                    EditText editText = (EditText) Globals.studentPlayActivity
-                            .findViewById(R.id.rangingText);
-                    editText.append(line + "\n");
-                }
-            });
+            if(Globals.studentPlayActivity != null){
+                Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        EditText editText = (EditText) Globals.studentPlayActivity
+                                .findViewById(R.id.rangingText);
+                        editText.append(line + "\n");
+                    }
+                });
+
+            }
+
 
         }
     }
@@ -112,13 +117,16 @@ public class Globals {
         if (username.equals(TEACHER_NAME)) {
         }
         else {
-            Globals.studentPlayActivity.runOnUiThread(new Runnable() {
-                public void run() {
-                    EditText editText = (EditText) Globals.studentPlayActivity
-                            .findViewById(R.id.meetHistory);
-                    editText.append(line + "\n");
-                }
-            });
+            if(Globals.studentPlayActivity != null) {
+
+                Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        EditText editText = (EditText) Globals.studentPlayActivity
+                                .findViewById(R.id.meetHistory);
+                        editText.append(line + "\n");
+                    }
+                });
+            }
         }
     }
 
