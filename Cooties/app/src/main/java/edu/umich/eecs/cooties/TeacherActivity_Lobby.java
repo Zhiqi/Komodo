@@ -13,6 +13,9 @@ import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
@@ -101,7 +104,28 @@ public class TeacherActivity_Lobby extends Activity implements AdapterView.OnIte
 
 
     public void startSimulation(View view) {
+        CollabrifyListener.CollabrifyBroadcastListener listen;
+        listen = new CollabrifyListener.CollabrifyBroadcastListener() {
+            @Override
+            public void onBroadcastDone(CollabrifyEvent collabrifyEvent) {
+                //System.out.println("@@@Event broadcast done");
+            }
 
+            @Override
+            public void onError(CollabrifyException e) {
+                //System.out.println("@@@CollabrifyBroadcastListener error");
+            }
+        };
+
+        //create base file
+        BaseFileMessage msg = new BaseFileMessage();
+        int major = (int)(Globals.mysession.id() % Short.MAX_VALUE);
+        if(major == 0) {
+            major++;
+        }
+        ArrayList<Long> list = new ArrayList<Long>();
+        msg.initWithInfectedUser(list, 30, major, 1);
+        Globals.myclient.broadcast(msg.outputBuffer(), "initialSettings", listen);
         Intent intent = new Intent(this, TeacherActivity_In_Game_Lobby.class);
         startActivity(intent);
         finish();

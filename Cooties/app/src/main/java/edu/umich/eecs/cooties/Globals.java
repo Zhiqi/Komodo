@@ -3,6 +3,8 @@ package edu.umich.eecs.cooties;
 import android.app.Activity;
 import android.widget.EditText;
 
+import org.altbeacon.beacon.BeaconTransmitter;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -23,7 +25,6 @@ public class Globals {
     public static CollabrifyClient myclient; // set in MainActivity.java
     public static CollabrifySession mysession; /* joined session
                                                     set in StudentJoinActivity or TeacherActivity_Initialize*/
-
     public static long selfId; /* participant id
                                     set in StudentJoinActivity */
     public static Hashtable<Short, Long> playerMinors = new Hashtable<Short, Long>(); /* key: minor value: userId (participant id)
@@ -38,6 +39,9 @@ public class Globals {
     public static Hashtable<Long, ArrayList> touchDict = new Hashtable<Long, ArrayList>(); // key: timestamp, value: list of touch message received
 
     public static short stickyMinor;
+
+    public static String major;
+    public static String minor;
 
     public static List<String> tags = Arrays.asList("tag61");
     public static Activity studentPlayActivity;

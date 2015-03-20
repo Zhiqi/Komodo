@@ -23,7 +23,7 @@
         </activity>
         <activity
             android:name=".TeacherActivity_Initialize"
-            android:label="@string/title_activity_teacher_initialze" >
+            android:label="@string/title_activity_teacher_initialize" >
         </activity>
         <activity
             android:name=".StudentJoinActivity"

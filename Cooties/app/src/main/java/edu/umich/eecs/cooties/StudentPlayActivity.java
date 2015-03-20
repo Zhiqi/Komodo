@@ -32,8 +32,7 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 public class StudentPlayActivity extends Activity implements BeaconConsumer, CollabrifyListener.CollabrifyLeaveSessionListener{
 
     private BeaconManager beaconManager;
-    private BeaconTransmitter beaconTransmitter;
-    private String minor;
+    //private String minor;
     private StudentBroadcastListener broadcastListener; // use this for broadcast
     private SearchBeacon searchBeacon; // select matched device
 
@@ -62,7 +61,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         verifyBluetooth();
 
         broadcastListener = new StudentBroadcastListener();
-        minor = broadcastListener.announcePlayer();
+        Globals.minor = broadcastListener.announcePlayer();
         searchBeacon = new SearchBeacon();
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
         beaconManager.bind(this);
@@ -160,77 +159,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         });
     }
 
-    public void startBLE(View view) {
 
-        if(beaconTransmitter != null){
-            //bluetooth may be off
-            return;
-        }
-
-        int result = BeaconTransmitter.checkTransmissionSupported(getApplicationContext());
-        if(result == BeaconTransmitter.SUPPORTED) {
-            //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
-            System.out.println("transmit iBeacon");
-            Beacon beacon = new Beacon.Builder()
-                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
-                    .setId2("12345")
-                    .setId3(minor)
-                    .setManufacturer(0x4c00)
-                    .setTxPower(-59)
-                    .setDataFields(Arrays.asList(new Long[]{0l}))
-                    .build();
-            BeaconParser beaconParser = new BeaconParser()
-                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
-            beaconTransmitter = new BeaconTransmitter(getApplicationContext(), beaconParser);
-            //beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
-            //beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
-            System.out.println("transmit iBeacon start:" + beaconTransmitter.isStarted());
-            //Toast.makeText(getApplicationContext(), "transmit iBeacon start:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
-            AdvertiseCallback callback = new AdvertiseCallback() {
-                @Override
-                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
-                    super.onStartSuccess(settingsInEffect);
-                    runOnUiThread(new Runnable()
-                    {
-                        public void run()
-                        {
-                            Toast.makeText(getApplicationContext(), "transmit iBeacon start: " + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
-            };
-            beaconTransmitter.startAdvertising(beacon, callback);
-
-
-        }
-        else if(result == BeaconTransmitter.NOT_SUPPORTED_MIN_SDK
-                || result == BeaconTransmitter.NOT_SUPPORTED_BLE
-                || result == BeaconTransmitter.NOT_SUPPORTED_MULTIPLE_ADVERTISEMENTS
-                || result == BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER){
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-    }
-
-    public void endBLE(View view) {
-        if(beaconTransmitter != null){
-            beaconTransmitter.stopAdvertising();
-            beaconTransmitter = null;
-            runOnUiThread(new Runnable()
-            {
-                public void run()
-                {
-                    Toast.makeText(getApplicationContext(), "Beacon Off", Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-    }
 
     public void leaveSession(View view) {
         try {

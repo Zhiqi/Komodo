@@ -1,9 +1,17 @@
 package edu.umich.eecs.cooties;
 
+import android.bluetooth.le.AdvertiseCallback;
+import android.bluetooth.le.AdvertiseSettings;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.BeaconTransmitter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
@@ -14,6 +22,9 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
  * Created by mtkliema on 3/10/15.
  */
 public class GameState implements CollabrifyListener.CollabrifySessionListener {
+
+    private BeaconTransmitter beaconTransmitter;
+
 
     @Override
     public void onBaseFileUploadComplete(long l) {
@@ -27,21 +38,92 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener {
 
     }
 
+    public void startBLE() {
+
+        if(beaconTransmitter != null){
+            //bluetooth may be off
+            return;
+        }
+
+        int result = BeaconTransmitter.checkTransmissionSupported(Globals.studentPlayActivity.getApplicationContext());
+        if(result == BeaconTransmitter.SUPPORTED) {
+            //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
+            System.out.println("transmit iBeacon");
+            Beacon beacon = new Beacon.Builder()
+                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+                    .setId2(Globals.major)
+                    .setId3(Globals.minor)
+                    .setManufacturer(0x4c00)
+                    .setTxPower(-59)
+                    .setDataFields(Arrays.asList(new Long[]{0l}))
+                    .build();
+            BeaconParser beaconParser = new BeaconParser()
+                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+            beaconTransmitter = new BeaconTransmitter(Globals.studentPlayActivity.getApplicationContext(), beaconParser);
+            //beaconTransmitter.setAdvertiseTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_HIGH);
+            //beaconTransmitter.setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY);
+            System.out.println("transmit iBeacon start:" + beaconTransmitter.isStarted());
+            //Toast.makeText(getApplicationContext(), "transmit iBeacon start:" + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
+            AdvertiseCallback callback = new AdvertiseCallback() {
+                @Override
+                public void onStartSuccess(AdvertiseSettings settingsInEffect) {
+                    super.onStartSuccess(settingsInEffect);
+                    Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            Toast.makeText(Globals.studentPlayActivity.getApplicationContext(), "transmit iBeacon start: " + beaconTransmitter.isStarted(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            };
+            beaconTransmitter.startAdvertising(beacon, callback);
+
+
+        }
+        else if(result == BeaconTransmitter.NOT_SUPPORTED_MIN_SDK
+                || result == BeaconTransmitter.NOT_SUPPORTED_BLE
+                || result == BeaconTransmitter.NOT_SUPPORTED_MULTIPLE_ADVERTISEMENTS
+                || result == BeaconTransmitter.NOT_SUPPORTED_CANNOT_GET_ADVERTISER){
+            Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(Globals.studentPlayActivity.getApplicationContext(), "Beacon Not Supported\n on This Device", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+    }
+
+    public void endBLE() {
+        if(beaconTransmitter != null){
+            beaconTransmitter.stopAdvertising();
+            beaconTransmitter = null;
+            Globals.studentPlayActivity.runOnUiThread(new Runnable() {
+                public void run() {
+                    Toast.makeText(Globals.studentPlayActivity.getApplicationContext(), "Beacon Off", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     //similar to HMCTouchBeaconEngine.m:collabrifyReceivedEvent
     @Override
     public void onReceiveEvent(CollabrifyEvent event) {
         String eventType = event.type();
         byte[] data = event.data();
 System.out.println("@@@event received " + eventType);
+
         if(eventType.equals("initialSettings")){
             BaseFileMessage msg = new BaseFileMessage();
             msg.initWithBuffer(data);
             // Set beacon majorsaq
             //[self.beaconManager setMajor:[[NSNumber alloc] initWithInt:msg.ibeaconMajor]];
+            Globals.major = String.valueOf(msg.ibeaconMajor);
             //incubationTimer = msg.incubationTime;
             //infected = msg.infectedUserId.contains(selfId);
             // check if beacon is turned on
-            //gameStarted = [self turnOnBeacons];
+            if (!Globals.username.equals(Globals.TEACHER_NAME)) {
+                System.out.println("@@@Start sim");
+                startBLE();
+            }
         }
         else if(eventType.equals("PlayerAnnounce")){
             PlayerAnnounceMessage msg = new PlayerAnnounceMessage();
@@ -70,12 +152,16 @@ System.out.println("@@@event received " + eventType);
 
 
         }
+        else if(eventType.equals("StopSim")) {
+            if (!Globals.username.equals(Globals.TEACHER_NAME)) {
+                System.out.println("@@@Stop sim");
+                endBLE();
+            }
+            //self.simulationStopped = true;
+            //[self.historyDelegate refresh];
+        }
         /*
-        else if([eventType isEqualToString:@"StopSim"]) {
-            [self turnOffBeacons];
-            self.simulationStopped = true;
-            [self.historyDelegate refresh];
-        } else if([eventType isEqualToString:@"Restart"]) {
+        else if([eventType isEqualToString:@"Restart"]) {
             [self.historyDelegate gameRestarted];
             [self gameClear];
         } else if([eventType isEqualToString:@"ShowMeetingRank"]) {

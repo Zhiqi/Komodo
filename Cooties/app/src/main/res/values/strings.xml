@@ -3,7 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_teacher_initialze">Teacher - Create a session</string>
+    <string name="title_activity_teacher_initialize">Teacher - Create a session</string>
     <string name="title_activity_teacher_activity__lobby">Teacher - Pre Sim Lobby</string>
     <string name="title_activity_teacher_activity__in__game__lobby">Teacher - In Game Lobby </string>
     <string name="title_activity_teacher_activity__list">Teacher - Joined Students</string>

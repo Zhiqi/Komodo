@@ -8,6 +8,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 
+import java.util.ArrayList;
+
+import edu.umich.imlc.collabrify.client.CollabrifyEvent;
+import edu.umich.imlc.collabrify.client.CollabrifyListener;
+import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
+
 
 public class TeacherActivity_In_Game_Lobby extends Activity {
 
@@ -56,6 +62,22 @@ public class TeacherActivity_In_Game_Lobby extends Activity {
     }
 
     public void stopSimulation(View view) {
+        CollabrifyListener.CollabrifyBroadcastListener listen;
+        listen = new CollabrifyListener.CollabrifyBroadcastListener() {
+            @Override
+            public void onBroadcastDone(CollabrifyEvent collabrifyEvent) {
+                //System.out.println("@@@Event broadcast done");
+            }
+
+            @Override
+            public void onError(CollabrifyException e) {
+                //System.out.println("@@@CollabrifyBroadcastListener error");
+            }
+        };
+
+        //create base file
+        byte[] data = new byte[1];
+        Globals.myclient.broadcast(data, "StopSim", listen);
         Intent intent = new Intent(this, TeacherActivity_Lobby.class);
 
         startActivity(intent);
