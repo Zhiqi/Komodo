@@ -1,31 +1,17 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="edu.umich.eecs.cooties.TeacherActivity_3_In_Game_Lobby">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop Simulation"
-        android:id="@+id/button5"
-        android:layout_below="@+id/button7"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="40dp"
-        android:background="#ffff0b09"
-        android:layout_alignParentEnd="true"
-        android:onClick="stopSimulation"/>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="List of Students"
         android:id="@+id/button6"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
         android:onClick="showStudents" />
 
     <Button
@@ -33,9 +19,14 @@
         android:layout_height="wrap_content"
         android:text="Meeting History"
         android:id="@+id/button7"
-        android:layout_below="@+id/button6"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="40dp"
-        android:layout_alignParentEnd="true"
         android:onClick="showHistory" />
-</RelativeLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Simulation"
+        android:id="@+id/button5"
+        android:onClick="stopSimulation"/>
+
+
+</LinearLayout>

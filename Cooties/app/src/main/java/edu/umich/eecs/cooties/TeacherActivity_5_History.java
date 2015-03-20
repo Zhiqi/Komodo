@@ -18,14 +18,6 @@ public class TeacherActivity_5_History extends Activity {
         setContentView(R.layout.activity_teacher_5_history);
 
         ArrayList<String> historyList = new ArrayList<String>();
-        //for (CollabrifyParticipant player : Globals.mysession.participants()) {
-        //System.out.println(player.toString());
-        //if (player.getId() != Globals.selfId && Globals.playerInfo.containsKey(player.getId()))
-        //  playerList.add(Globals.playerInfo.get(player.getId()).name);
-
-
-        //    playerList.add(String.valueOf(player.getId()));
-        //}
         for (HistoryItem k : Globals.historyList){
             historyList.add(k.firstUser.name  + " and " + k.secondUser.name +" meet at " + k.timestamp); // + " ; participant id is " + String.valueOf(k));
         }
@@ -34,7 +26,6 @@ public class TeacherActivity_5_History extends Activity {
         ListView codeLearnLessons = (ListView)findViewById(R.id.historyListView);
         codeLearnLessons.setAdapter(historyArrayAdapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

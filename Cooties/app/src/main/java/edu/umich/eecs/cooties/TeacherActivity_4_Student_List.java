@@ -6,42 +6,47 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 
 
 public class TeacherActivity_4_Student_List extends Activity {
 
-    ArrayList<String> active_players = new ArrayList<String>();
-    private ListView players_list = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        ArrayList<String> active_players = new ArrayList<String>();
+        ListView players_list = null;
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_activity_4);
+        setContentView(R.layout.activity_teacher_4_current_users);
+
+
         players_list = (ListView)findViewById(R.id.listView);
-        for(String a : Globals.active_players.values()){
-            active_players.add(a);
+        for(Long a : Globals.playerInfo.keySet()){
+
+
+            if(Globals.infected_status_by_player.get(a) == true){
+                active_players.add(Globals.playerInfo.get(a).name + ":\tINFECTED");
+            }
+            else{
+                active_players.add(Globals.playerInfo.get(a).name+":\tNOT INFECTED");
+            }
         }
-        System.out.println("Found " + Globals.active_players.size() + " students");
+        Toast.makeText(getApplicationContext(), "Found " + Globals.playerInfo.size() + " students", Toast.LENGTH_LONG ).show();
+        System.out.println("Found " + Globals.playerInfo.size() + " students");
         ArrayAdapter<String> active_players_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, active_players);
         players_list.setAdapter(active_players_adapter);
-
-//        ArrayList<String> playerList = new ArrayList<String>();
-
-//        for (long k : Globals.playerInfo.keySet()){
-//            playerList.add(Globals.playerInfo.get(k).name); // + " ; participant id is " + String.valueOf(k));
-//        }
 
 
     }
 
+    //close this activity
     protected void onStop(){
         super.onStop();
-        finish();
-
-
+//        finish();
     }
 
 //    public void add_additional_player(String new_player){

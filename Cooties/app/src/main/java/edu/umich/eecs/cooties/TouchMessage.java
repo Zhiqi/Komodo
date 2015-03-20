@@ -1,7 +1,6 @@
 package edu.umich.eecs.cooties;
 
 import edu.umich.eecs.cooties.Touch.Touch1;
-import java.util.*;
 
 /**
  * Created by luke on 2/28/15.

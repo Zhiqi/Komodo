@@ -1,14 +1,12 @@
 package edu.umich.eecs.cooties;
 
-import java.util.Hashtable;
-import edu.umich.eecs.cooties.Touch;
+import android.util.Log;
+
 import edu.umich.eecs.cooties.PlayerAnnounceMessage;
 import edu.umich.eecs.cooties.Globals;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
-import edu.umich.eecs.cooties.StudentJoinActivity;
-import edu.umich.eecs.cooties.PlayerInfo;
 
 /**
  * Created by luke on 3/10/15.
@@ -17,24 +15,28 @@ import edu.umich.eecs.cooties.PlayerInfo;
 //broadcasts player information and device detection information
 public class StudentBroadcastListener {
 
+    private static final String TAG = "StudentBroadcastLisr";
+
+
     CollabrifyListener.CollabrifyBroadcastListener listen;
     int incubationTimer;
     boolean incubationCompleted;
-//    boolean infected;
 
 
     //called by both searchBeacon and studentPlayActivity
+    //used to broadcast player annouce message and
     public StudentBroadcastListener() {
 
         listen = new CollabrifyListener.CollabrifyBroadcastListener() {
             @Override
             public void onBroadcastDone(CollabrifyEvent collabrifyEvent) {
-                //System.out.println("@@@Event broadcast done");
+                System.out.println("@@@Event broadcast done of type "+collabrifyEvent.type());
             }
 
             @Override
             public void onError(CollabrifyException e) {
-                //System.out.println("@@@CollabrifyBroadcastListener error");
+                System.out.println("@@@CollabrifyBroadcastListener error");
+                Log.e(TAG, "BroadcastListener Error", e);
             }
         };
     }
@@ -78,7 +80,6 @@ public class StudentBroadcastListener {
     // When two devices are touched, broadcast a touch message into session
     public void detectedDevice(short minor) {
         System.out.println("@@@enter detectedDevice()");
-
         boolean inIncubation = incubationTimer > 0 && !incubationCompleted;
         long timestamp = Math.round((double)System.currentTimeMillis() /1000);
         TouchMessage msg =  new TouchMessage();

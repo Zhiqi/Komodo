@@ -1,34 +1,20 @@
 package edu.umich.eecs.cooties;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
-import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 

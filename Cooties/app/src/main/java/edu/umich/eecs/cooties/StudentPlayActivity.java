@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.Menu;
@@ -237,6 +236,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
     public void leaveSession(View view) {
         try {
             Globals.myclient.leaveSession(false, this);
+            Globals.mysession = null;
+            endBLE(view);
         }
         catch(Exception e) {
 
@@ -250,9 +251,9 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             public void run()
             {
                 Toast.makeText(getApplicationContext(), "You have left the session", Toast.LENGTH_SHORT).show();
-                finish();
             }
         });
+        finish();
         System.out.println("Leave Session");
     }
 

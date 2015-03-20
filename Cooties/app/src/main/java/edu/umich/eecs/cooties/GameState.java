@@ -1,7 +1,5 @@
 package edu.umich.eecs.cooties;
 
-import android.widget.EditText;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -39,20 +37,33 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
         System.out.println("Receiving Collabrify event in GameState:" +event.type());
         String eventType = event.type();
         byte[] data = event.data();
-System.out.println("@@@event received " + eventType);
+        System.out.println("@@@event received " + eventType);
+
         if(eventType.equals("initialSettings")){
             BaseFileMessage msg = new BaseFileMessage();
             msg.initWithBuffer(data);
 
             Globals.major = msg.ibeaconMajor;
-            Globals.infected_user_ids = msg.infectedUserId;
+            Globals.initial_infected_user_ids = msg.infectedUserId;
             Globals.incubation_time = msg.incubationTime;
             Globals.hide_health_status = msg.hideHealthStatus;
-            if(Globals.infected_user_ids.contains(Globals.selfId)){
+
+            if(Globals.initial_infected_user_ids.contains(Globals.selfId)){
                 Globals.infected_status = true;
             }
 
-                                             // Set beacon majorsaq
+            for(Long a : Globals.initial_infected_user_ids){
+                Globals.infected_status_by_player.put(a, true);
+                System.out.println("Initial Infected User ID "+a);
+
+            }
+
+            System.out.println("Received Basefile  Message");
+            System.out.println("Major is "+Globals.major);
+            System.out.println("Incubation Time is "+ Globals.incubation_time);
+            System.out.println("Hide health status is "+Globals.hide_health_status);
+
+            // Set beacon majorsaq
             //[self.beaconManager setMajor:[[NSNumber alloc] initWithInt:msg.ibeaconMajor]];
             //incubationTimer = msg.incubationTime;
             //infected = msg.infectedUserId.contains(selfId);
@@ -79,9 +90,15 @@ System.out.println("@@@event received " + eventType);
             TouchMessage msg = new TouchMessage();
             msg.initWithBuffer(data);
 
+
             touchEventHelper(msg);
             System.out.println("@@@Touch message received, sent by Player " +msg.sourceUserId);
         }
+
+        //we definately can't do this because it's not in the ios version.
+        //we need to find the reason behind the callback not being executed
+        //i think it could be too many touch messages being send out - as the incoming limit to google is 2/sec
+        //google would drop the messages-> in player init
         else if(eventType.equals("ResendPlayer")) {
             // If player find that he missed player announce message, he will broadcast this event
             // user will re-broadcast "playerAnnounce" message if receive this event
@@ -141,6 +158,13 @@ System.out.println("@@@event received " + eventType);
             }
             */
         }
+
+        if(Globals.infected_status_by_player.containsKey(playerId)){
+            //do nothing, key with infection status already in from basemsg
+        }
+        else{
+            Globals.infected_status_by_player.put(playerId, false);
+        }
         /*
         else {
             if(playerId  == Globals.selfId) {
@@ -174,8 +198,8 @@ System.out.println("@@@event received " + eventType);
                 else infection = HMCNone;
                 */
 
-                PlayerInfo firstPlayer;
-                PlayerInfo secondPlayer;
+                PlayerInfo firstPlayer; //self
+                PlayerInfo secondPlayer; //opposite
                 if(msg.sourceUserId == Globals.selfId){
                     firstPlayer = Globals.playerInfo.get(msg.sourceUserId);
                     secondPlayer = Globals.playerInfo.get(touch.sourceUserId);
@@ -186,28 +210,42 @@ System.out.println("@@@event received " + eventType);
                     //else if(infection == HMCSecondUser) infection = HMCFirstUser;
                 }
 
+
+                if(msg.infected || touch.infected){
+                    Globals.infected_status = true;
+                    Globals.infected_status_by_player.put(firstPlayer.playerId, true);
+                    Globals.infected_status_by_player.put(secondPlayer.playerId, true);
+                    //update_infection_screen();
+                }
+
+
                 // The block can only be run on only one thread for any given time
-                    HistoryItem historyItem = new HistoryItem(msg.timestamp, firstPlayer, secondPlayer);
-                    historyItem.increment();
+                HistoryItem historyItem = new HistoryItem(msg.timestamp, firstPlayer, secondPlayer);
+                historyItem.increment();
 
-                    if(Globals.historyList.contains(historyItem)) {
-                        //History item records how many are created.  If history list already contains it, then subtract
-                        historyItem.decrement();
-                    }
-                    else {
-                        Globals.historyList.add(historyItem);
-                        Globals.logMeetingToDisplay(historyItem.firstUser.name + " and " + historyItem.secondUser.name + " meet at " + historyItem.timestamp);
-                        if(msg.sourceUserId == Globals.selfId || touch.sourceUserId == Globals.selfId) {
-                            short targetMinor;
-                            if(firstPlayer.playerId == Globals.selfId) {
-                                targetMinor = secondPlayer.minor;
-                            }
-                            else {
-                                targetMinor = firstPlayer.minor;
-                            }
 
-                            //prevent interactions for 30 seconds - may not be accurate if an app joins late and receives a bunch of prior messages
-                            receivedEventFrom(targetMinor);
+
+                if(Globals.historyList.contains(historyItem)) {
+                    //History item records how many are created.  If history list already contains it, then subtract
+                    historyItem.decrement();
+                }
+                else {
+                    Globals.historyList.add(historyItem);
+                    Globals.logMeetingToDisplay(historyItem.firstUser.name + " and " + historyItem.secondUser.name + " meet at " + historyItem.timestamp);
+
+
+
+                    //prevent interactions for 30 seconds - may not be accurate if an app joins late and receives a bunch of prior messages
+                    if(msg.sourceUserId == Globals.selfId || touch.sourceUserId == Globals.selfId) {
+                        short targetMinor;
+                        if(firstPlayer.playerId == Globals.selfId) {
+                            targetMinor = secondPlayer.minor;
+                        }
+                        else {
+                            targetMinor = firstPlayer.minor;
+                        }
+
+                        receivedEventFrom(targetMinor);
                             /*
                             for (HistoryItem HI : Globals.historyList){
                                 System.out.println("@@@Player " + HI.firstUser.name + " and Player " + HI.secondUser.name + " meet at " + HI.timestamp);
@@ -231,8 +269,8 @@ System.out.println("@@@event received " + eventType);
                                 [self.delegate receivedTouchEvent:playerInfo isInfected:newlyInfected];
                             }
                             */
-                        }
                     }
+                }
             }
 
         }

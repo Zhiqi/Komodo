@@ -5,15 +5,14 @@ package edu.umich.eecs.cooties;
  */
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 
 public class CheckTouch {
 
+    static final int timeSpanAllowed = 3;
     //called by toucheventhelper in Gamestate
     //search for corresponding touch interaction messages within timespan and returns array of candidates
     ArrayList bumpEvents(TouchMessage msg) {
-        final int timeSpanAllowed = 3;
 
         ArrayList<TouchMessage> found = new ArrayList<TouchMessage>();
 
@@ -34,7 +33,6 @@ public class CheckTouch {
         addTouch(msg);
 
 
-        //may need to change to keep the oldest message - if returning only one, do not use arraylist???
         // Remove duplicate
         if(found.size() > 0) {
             for (int i = found.size() - 1; i > 0; i--){

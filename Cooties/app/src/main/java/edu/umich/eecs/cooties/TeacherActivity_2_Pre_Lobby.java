@@ -16,8 +16,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
@@ -38,9 +36,9 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
 
     @Override
     public void onStop(){
-        super.onStop();
-        end_Session();
+//        end_Session();
 
+        super.onStop();
     }
 
     @Override
@@ -89,7 +87,7 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_activity_2);
+        setContentView(R.layout.activity_teacher_2);
 
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -124,6 +122,7 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
 
         ArrayList<String> names = new ArrayList<String>();
 
+        //may need to change to only students who've received annouce mesg for later on - currently uses active participants
         final ArrayList<CollabrifyParticipant> participants = new ArrayList(Globals.mysession.participants());
 
         for (int i = 0; i<participants.size(); i++){
@@ -244,17 +243,20 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
         Intent intent = new Intent(this, TeacherActivity_3_In_Game_Lobby.class);
         startActivity(intent);
 
-        //end this activity
+        //end this
         finish();
 
     }
 
 
+    //could make this into something in GameState taking in a leavesessionlistener
     //makes teacher leave session, destroying the collabrify session
     //callback is onDisconnect
     public void end_Session(){
         try{
             Globals.myclient.leaveSession(true, this);
+            Globals.mysession = null;
+
         }
         catch(Exception e){
 
@@ -262,9 +264,10 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
 
     }
 
-    //button for cancel
+    //button for cancel - this will close app
     public void cancelSimulation(View view) {
         end_Session();
+
     }
 
 
