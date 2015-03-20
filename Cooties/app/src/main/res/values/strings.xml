@@ -7,6 +7,7 @@
     <string name="title_activity_teacher_activity__lobby">Teacher - Pre Sim Lobby</string>
     <string name="title_activity_teacher_activity__in__game__lobby">Teacher - In Game Lobby </string>
     <string name="title_activity_teacher_activity__list">Teacher - Joined Students</string>
+    <string name="title_activity_teacher_activity__history">Teacher - Meeting History</string>
     <string name="title_activity_student_join">Student - Join a session</string>
     <string name="title_activity_student_play">Student - Play</string>
 
@@ -30,6 +31,7 @@
             <item>2 minute</item>
             <item>5 minute</item>
         </string-array>
+
 
 
 </resources>

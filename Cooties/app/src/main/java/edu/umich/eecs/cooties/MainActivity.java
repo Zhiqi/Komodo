@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
             Log.e("new Client", "new Collabrify Client Error");
         }
 
-        if (username.equals("T")) {
+        if (username.equals(Globals.TEACHER_NAME)) {
             intent = new Intent(this, TeacherActivity_Initialize.class);
         }
         else {

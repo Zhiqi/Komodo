@@ -33,12 +33,12 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
         //Intent intent = getIntent();
 
         //can ignore this if using Globals structure
-        final String username = Globals.username;
+        //final String username = Globals.username;
         runOnUiThread(new Runnable()
         {
             public void run()
             {
-                Toast.makeText(getApplicationContext(), "Entered with username: "+username, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Entered as Teacher: "+ Globals.username, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -72,23 +72,22 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
     // call this function
     // Start a new session and set the listener to
     public void create(View view) {
-        System.out.println("create start");
+        //System.out.println("create start");
 
         EditText editText = (EditText) findViewById(R.id.sessionName);
         String sessionName = editText.getText().toString();
 
 
         try {
-            System.out.println("Placeholder for create session");
-            Globals.myclient.createSession(sessionName,Globals.tags,null,0,true,this);
+            //System.out.println("Placeholder for create session");
+            Globals.myclient.createSession(sessionName,Globals.tags,null,0,false,this);
 
         }
         catch(Exception a){
-            System.out.println("create exception");
-
+            System.out.println("@@@create exception");
         }
 
-        System.out.println("create done");
+        //System.out.println("create done");
 
 
 
@@ -102,7 +101,8 @@ public class TeacherActivity_Initialize extends Activity implements CollabrifyLi
     {
 
         Globals.mysession = session;
-        System.out.println("session created with id"+Globals.mysession.id());
+        Globals.selfId = session.owner().getId();
+        System.out.println("@@@session created with id " + Globals.mysession.id());
 
         Intent intent = new Intent(this, TeacherActivity_Lobby.class);
 

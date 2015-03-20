@@ -8,11 +8,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
+import edu.umich.imlc.collabrify.client.CollabrifySession;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
@@ -110,13 +112,17 @@ public class TeacherActivity_Lobby extends Activity implements AdapterView.OnIte
         // Is the view now checked?
     }
 
-    public void cancelSimulation(View view) {
+    // destroy the session created and disable start simulation button
+    public void destroySession(View view) {
         try{
+
             Globals.myclient.leaveSession(true, this);
         }
         catch(Exception e){
 
         }
+        Button startBtn = (Button) findViewById(R.id.button3);
+        startBtn.setEnabled(false);
         // Is the view now checked?
     }
 

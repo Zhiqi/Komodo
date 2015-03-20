@@ -35,7 +35,7 @@
         </activity>
         <activity
             android:name=".TeacherActivity_List"
-            android:label="@string/title_activity_teacher_activity__list">
+            android:label="@string/title_activity_teacher_activity__list" >
         </activity>
         <activity
             android:name=".TeacherActivity_Lobby"
@@ -44,6 +44,14 @@
         <activity
             android:name=".TeacherActivity_In_Game_Lobby"
             android:label="@string/title_activity_teacher_activity__in__game__lobby" >
+        </activity>
+        <activity
+            android:name=".TeacherActivity_History"
+            android:label="@string/title_activity_teacher_activity__history"
+            android:parentActivityName=".TeacherActivity_In_Game_Lobby" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="edu.umich.eecs.cooties.TeacherActivity_In_Game_Lobby" />
         </activity>
     </application>
 

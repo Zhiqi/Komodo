@@ -9,33 +9,30 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 
-
-public class TeacherActivity_List extends Activity {
+public class TeacherActivity_History extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_teacher_activity_list);
+        setContentView(R.layout.activity_teacher_activity__history);
 
-        ArrayList<String> playerList = new ArrayList<String>();
+        ArrayList<String> historyList = new ArrayList<String>();
         //for (CollabrifyParticipant player : Globals.mysession.participants()) {
-            //System.out.println(player.toString());
-            //if (player.getId() != Globals.selfId && Globals.playerInfo.containsKey(player.getId()))
-              //  playerList.add(Globals.playerInfo.get(player.getId()).name);
+        //System.out.println(player.toString());
+        //if (player.getId() != Globals.selfId && Globals.playerInfo.containsKey(player.getId()))
+        //  playerList.add(Globals.playerInfo.get(player.getId()).name);
 
 
         //    playerList.add(String.valueOf(player.getId()));
         //}
-        for (long k : Globals.playerInfo.keySet()){
-            playerList.add(Globals.playerInfo.get(k).name); // + " ; participant id is " + String.valueOf(k));
+        for (HistoryItem k : Globals.historyList){
+            historyList.add(k.firstUser.name  + " and " + k.secondUser.name +" meet at " + k.timestamp); // + " ; participant id is " + String.valueOf(k));
         }
 
-        ArrayAdapter<String> codeLearnArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerList);
-        ListView codeLearnLessons = (ListView)findViewById(R.id.listView);
-        codeLearnLessons.setAdapter(codeLearnArrayAdapter);
-
+        ArrayAdapter<String> historyArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, historyList);
+        ListView codeLearnLessons = (ListView)findViewById(R.id.historyListView);
+        codeLearnLessons.setAdapter(historyArrayAdapter);
     }
 
 
