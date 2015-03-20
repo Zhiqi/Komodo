@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import edu.umich.imlc.collabrify.client.CollabrifyParticipant;
 
 
 public class TeacherActivity_4_Student_List extends Activity {
@@ -27,11 +28,20 @@ public class TeacherActivity_4_Student_List extends Activity {
         ArrayAdapter<String> active_players_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, active_players);
         players_list.setAdapter(active_players_adapter);
 
+//        ArrayList<String> playerList = new ArrayList<String>();
+
+//        for (long k : Globals.playerInfo.keySet()){
+//            playerList.add(Globals.playerInfo.get(k).name); // + " ; participant id is " + String.valueOf(k));
+//        }
+
+
     }
 
     protected void onStop(){
         super.onStop();
         finish();
+
+
     }
 
 //    public void add_additional_player(String new_player){

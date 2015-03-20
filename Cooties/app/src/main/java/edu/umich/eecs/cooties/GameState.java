@@ -22,13 +22,13 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
     @Override
     public void onBaseFileUploadComplete(long l) {
-        System.out.println("basefile upload done ");
+        System.out.println("@@@basefile upload done ");
 
     }
 
     @Override
     public void onBaseFileReceived(File file) {
-        System.out.println("basefile received ");
+        System.out.println("@@@basefile received ");
 
     }
 
@@ -39,7 +39,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
         System.out.println("Receiving Collabrify event in GameState:" +event.type());
         String eventType = event.type();
         byte[] data = event.data();
-
+System.out.println("@@@event received " + eventType);
         if(eventType.equals("initialSettings")){
             BaseFileMessage msg = new BaseFileMessage();
             msg.initWithBuffer(data);
@@ -81,6 +81,13 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
             touchEventHelper(msg);
             System.out.println("@@@Touch message received, sent by Player " +msg.sourceUserId);
+        }
+        else if(eventType.equals("ResendPlayer")) {
+            // If player find that he missed player announce message, he will broadcast this event
+            // user will re-broadcast "playerAnnounce" message if receive this event
+
+
+
         }
         /*
         else if([eventType isEqualToString:@"StopSim"]) {
@@ -236,6 +243,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     public void onParticipantJoined(CollabrifyParticipant collabrifyParticipant) {
         System.out.println("collabrify participant joined:" + collabrifyParticipant.getDisplayName());
         Globals.active_players.put(collabrifyParticipant.getId(),collabrifyParticipant.getDisplayName());
+        System.out.println("@@@collabrify participant joined:" + collabrifyParticipant.getDisplayName());
 
     }
 
@@ -248,7 +256,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
     @Override
     public void onSessionEnd(long l) {
-        System.out.println(" Collabrify session ended!:" + l);
+        System.out.println(" @@@Collabrify session ended!:" + l);
 
     }
 

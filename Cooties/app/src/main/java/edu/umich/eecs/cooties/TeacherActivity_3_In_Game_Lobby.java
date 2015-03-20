@@ -47,4 +47,17 @@ public class TeacherActivity_3_In_Game_Lobby extends Activity {
 
     }
 
+    public void showHistory(View view) {
+        Intent intent = new Intent(this, TeacherActivity_History.class);
+
+        startActivity(intent);
+
+    }
+
+    public void stopSimulation(View view) {
+        Intent intent = new Intent(this, TeacherActivity_Lobby.class);
+
+        startActivity(intent);
+
+    }
 }

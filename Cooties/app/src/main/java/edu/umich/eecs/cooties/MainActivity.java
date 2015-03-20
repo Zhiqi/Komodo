@@ -2,6 +2,7 @@ package edu.umich.eecs.cooties;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,7 +56,7 @@ public class MainActivity extends Activity {
             Log.e("new Client", "new Collabrify Client Error");
         }
 
-        if (username.equals("T")) {
+        if (username.equals(Globals.TEACHER_NAME)) {
             intent = new Intent(this, TeacherActivity_1_Initialize.class);
         }
         else {

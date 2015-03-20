@@ -16,12 +16,13 @@ import edu.umich.imlc.collabrify.client.CollabrifySession;
  */
 public class Globals {
 
+    public static String TEACHER_NAME = "T";
     public static String username; /* username that user entered
                                         set in MainActivity.java */
     public static GameState model = new GameState(); // session listener for myclient
     public static CollabrifyClient myclient; // set in MainActivity.java
     public static CollabrifySession mysession; /* joined session
-                                                    set in StudentJoinActivity */
+                                                    set in StudentJoinActivity or TeacherActivity_Initialize*/
 
     public static long selfId; /* participant id set in StudentJoinActivity */
 
@@ -67,31 +68,23 @@ public class Globals {
     public static Hashtable<Long, String> active_players = new Hashtable<Long, String>();
 
     public static void logUsernameToDisplay(final String line) {
-
-//        if(studentPlayActivity != null){
+        if (username.equals(TEACHER_NAME)) {
+        }
+        else {
             Globals.studentPlayActivity.runOnUiThread(new Runnable() {
                 public void run() {
                     EditText editText = (EditText) Globals.studentPlayActivity
                             .findViewById(R.id.rangingText);
                     editText.append(line + "\n");
-
                 }
             });
 
-//        }
-//        else if(tal != null){
-//            tal.add_additional_player(line);
-////                ListView editText = (ListView) Globals.teacher_list.findViewById(R.id.listView);
-////            ArrayAdapter<String> codeLearnArrayAdapter = editText.getAdapter();
-////                editText.append(line +"\n");
-//        }
-
-
+        }
     }
-
     public static void logMeetingToDisplay(final String line) {
-
-//        if (studentPlayActivity != null) {
+        if (username.equals(TEACHER_NAME)) {
+        }
+        else {
             Globals.studentPlayActivity.runOnUiThread(new Runnable() {
                 public void run() {
                     EditText editText = (EditText) Globals.studentPlayActivity
@@ -99,18 +92,7 @@ public class Globals {
                     editText.append(line + "\n");
                 }
             });
-
-//        }
-//        else if(teacher_interactions != null){
-//            Globals.teacher_interactions.runOnUiThread(new Runnable() {
-//                public void run() {
-//                    EditText editText = (EditText) Globals.teacher_interactions
-//                            .findViewById(R.id.);
-//                    editText.append(line + "\n");
-//                }
-//            });
-
-//        }
+        }
     }
 
 }
