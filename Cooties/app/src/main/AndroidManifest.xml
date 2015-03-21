@@ -17,7 +17,6 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,12 +46,8 @@
         </activity>
         <activity
             android:name=".TeacherActivity_5_History"
-            android:label="@string/title_activity_teacher_activity__history"
-            android:parentActivityName=".TeacherActivity_3_In_Game_Lobby" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="edu.umich.eecs.cooties.TeacherActivity_3_In_Game_Lobby" />
-        </activity>
+            android:label="@string/title_activity_teacher_activity__history" >
+         </activity>
         <activity
             android:name=".Student_Intersitital_Activity_2"
             android:label="@string/title_activity_student__intersitital__activity_2" >
