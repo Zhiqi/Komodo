@@ -30,7 +30,7 @@ public class TeacherActivity_3_In_Game_Lobby extends Activity implements Collabr
     public void showHistory(View view) {
         Intent intent = new Intent(this, TeacherActivity_5_History.class);
         startActivity(intent);
-        finish();
+//        finish();
     }
 
     public void end_Session(){
@@ -49,10 +49,10 @@ public class TeacherActivity_3_In_Game_Lobby extends Activity implements Collabr
         end_Session();
     }
 
-    public void onStop(){
-//        end_Session();
-        super.onStop();
-    }
+//    public void onStop(){
+////        end_Session();
+//        super.onStop();
+//    }
 
     @Override
     public void onDisconnect() {
