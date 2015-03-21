@@ -52,10 +52,10 @@ public class TeacherActivity_4_Student_List extends Activity {
     }
 
     //close this activity
-    protected void onStop(){
-        super.onStop();
-//        finish();
-    }
+//    protected void onStop(){
+//        super.onStop();
+////        finish();
+//    }
 
 //    public void add_additional_player(String new_player){
 //        active_players.add(new_player);
