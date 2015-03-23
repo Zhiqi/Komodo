@@ -45,6 +45,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
             msg.initWithBuffer(data);
 
             Globals.major = msg.ibeaconMajor;
+
+            //may need to do deep copy instead of reference
             Globals.initial_infected_user_ids = msg.infectedUserId;
             Globals.incubation_time = msg.incubationTime;
             Globals.hide_health_status = msg.hideHealthStatus;
@@ -230,7 +232,17 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
 
                 if(msg.infected || touch.infected){
-                    Globals.infected_status = true;
+
+                    if(firstPlayer.playerId == Globals.selfId || secondPlayer.playerId == Globals.selfId){
+                        Globals.infected_status = true;
+
+                        if(Globals.studentPlayActivity != null){
+                            Globals.studentPlayActivity.showInfected();
+                        }
+
+
+                    }
+
                     Globals.infected_status_by_player.put(firstPlayer.playerId, true);
                     Globals.infected_status_by_player.put(secondPlayer.playerId, true);
                     //update_infection_screen();

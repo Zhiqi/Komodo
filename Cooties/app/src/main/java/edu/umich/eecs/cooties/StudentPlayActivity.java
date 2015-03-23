@@ -2,9 +2,13 @@ package edu.umich.eecs.cooties;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
@@ -30,7 +34,7 @@ import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 
 
-public class StudentPlayActivity extends Activity implements BeaconConsumer, CollabrifyListener.CollabrifyLeaveSessionListener{
+public class StudentPlayActivity extends Activity implements BeaconConsumer, CollabrifyListener.CollabrifyLeaveSessionListener, StudentPlayFragment_Infected.OnFragmentInteractionListener, StudentPlayFragment_Not_Infected.OnFragmentInteractionListener {
 
     private BeaconManager beaconManager;
     private BeaconTransmitter beaconTransmitter;
@@ -47,8 +51,20 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         setContentView(R.layout.activity_student_play);
         Globals.studentPlayActivity = this;
 
+        FragmentManager fm = getFragmentManager();
+        Fragment fragment = fm.findFragmentById(R.id.spFragment);
+        if (fragment == null) {
 
+            if(Globals.infected_status){
+                fragment = new StudentPlayFragment_Infected();
+            }
+            else{
+                fragment = new StudentPlayFragment_Not_Infected();
+            }
 
+            fm.beginTransaction()
+                    .add(R.id.spFragment, fragment)
+                    .commit(); }
 
         //NEED TO WAIT UNTIL THIS THREAD HAS BASEFILE BROADCAST MESSAGE BEFORE STARTING,
         //BECAUSE ORDER SHOULD BE LIKE THIS
@@ -78,6 +94,23 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         searchBeacon = new SearchBeacon();
         beaconManager = org.altbeacon.beacon.BeaconManager.getInstanceForApplication(this);
         beaconManager.bind(this);
+
+    }
+
+    //will update the ui with infected fragment
+    public void showInfected() {
+
+        // Create new fragment and transaction
+        Fragment newFragment = new StudentPlayFragment_Infected();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack
+        transaction.replace(R.id.spFragment, newFragment);
+
+        // Commit the transaction
+        transaction.commit();
+
 
     }
 
@@ -193,7 +226,6 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         //Verify receipt of basemsg
         if(Globals.major == 0){
             Toast.makeText(getApplicationContext(), "FAIL! \nHaven't received basefile yet", Toast.LENGTH_LONG).show();
-
             return;
         }
 
@@ -306,4 +338,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         super.onStop();
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 }

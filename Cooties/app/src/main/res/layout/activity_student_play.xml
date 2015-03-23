@@ -47,4 +47,13 @@
         android:text="meeting history:\n"
         android:layout_marginTop="50dp" />
 
+    <FrameLayout
+        android:layout_width="400dp"
+        android:layout_height="600dp"
+        android:id="@+id/spFragment"
+        android:layout_below="@+id/meetHistory"
+        android:layout_centerHorizontal="true">
+
+        </FrameLayout>
+
 </RelativeLayout>
