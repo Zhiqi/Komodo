@@ -25,9 +25,7 @@ public class Globals {
     public static CollabrifySession mysession; /* joined session set in StudentJoinActivity or TeacherActivity_Initialize*/
     public static long selfId; /* participant id set in StudentJoinActivity */
 
-
     public static StudentPlayActivity studentPlayActivity = null;
-//    public static Activity studentPlayActivity = null;
     public static Student_Intersitital_Activity_2 interstitial_wait = null;
     public static Boolean base_received = false;
 

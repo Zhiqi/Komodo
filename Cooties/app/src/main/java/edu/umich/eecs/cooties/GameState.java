@@ -121,6 +121,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
         }
         else if(eventType.equals("StopSim")) {
             //disable beacons
+            if (!Globals.username.equals(Globals.TEACHER_NAME))
+                Globals.studentPlayActivity.leaveSession();
         }
         else if(eventType.equals("Restart")) {
 

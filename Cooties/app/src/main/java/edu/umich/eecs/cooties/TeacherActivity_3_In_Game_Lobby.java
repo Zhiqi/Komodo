@@ -46,6 +46,8 @@ public class TeacherActivity_3_In_Game_Lobby extends Activity implements Collabr
 
     //go back to session creation
     public void stopSimulation(View view) {
+        byte [] msg = new byte[1];
+        Globals.myclient.broadcast(msg, "StopSim", Globals.model);
         end_Session();
     }
 
