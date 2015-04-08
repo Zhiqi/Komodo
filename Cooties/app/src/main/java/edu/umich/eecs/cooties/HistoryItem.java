@@ -15,10 +15,15 @@ public class HistoryItem {
         secondUser = secondUser1;
     }
 
-    boolean isEqual(HistoryItem object) {
-        return (object.timestamp - timestamp) < 7 &&
-                (((object.firstUser.playerId == firstUser.playerId) && (object.secondUser.playerId == secondUser.playerId)) ||
-                 ((object.firstUser.playerId == secondUser.playerId) && (object.firstUser.playerId == secondUser.playerId)));
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof HistoryItem) {
+            HistoryItem object = (HistoryItem) o;
+            return (object.timestamp - timestamp) < 7 &&
+                    (((object.firstUser.playerId == firstUser.playerId) && (object.secondUser.playerId == secondUser.playerId)) ||
+                            ((object.firstUser.playerId == secondUser.playerId) && (object.firstUser.playerId == secondUser.playerId)));
+        }
+        else return false; 
     }
 
     boolean containsUserId(long userId){
