@@ -206,6 +206,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             Log.d("SPA", "min is "+min.toString());
 
             beaconManager.startRangingBeaconsInRegion(new Region("myApplicationRanger", uuid, maj, null));
+//            beaconManager.startRangingBeaconsInRegion(new Region("myApplicationRanger", uuid, maj, null));
 //                    new Region("myRangingUniqueI",null),null,null)
         } catch (RemoteException e) {
         Log.e("SPA", "Beacon Service Connect Start Ranging error", e);

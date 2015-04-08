@@ -16,8 +16,18 @@ import edu.umich.imlc.collabrify.client.CollabrifySession;
  * Created by mtkliema on 2/24/15.
  */
 public class Globals {
-    public static final String TEACHER_NAME = "T";
+//    public static final String login_email = "collabrify.tester@gmail.com";
+//    public static final String login_id = "4891981239025664";
+//    public static final String login_email = "441winter2014@umich.edu";
+//    public static final String login_id = "338692774BBE";
+//    public static final List<String> tags = Arrays.asList("tag13"); //tag identifying cooties+ application on collabrify
+
+
+    public static final String login_email = "imlcteam@gmail.com";
+    public static final String login_id = "2468";
     public static final List<String> tags = Arrays.asList("tag61"); //tag identifying cooties+ application on collabrify
+
+    public static final String TEACHER_NAME = "T";
 
     public static String username; /* username that user entered set in MainActivity.java */
     public static GameState model = new GameState(); // session listener for myclient
@@ -93,7 +103,24 @@ public class Globals {
     public static short stickyMinor;
 
 
-
+    public static void clear() {
+        username=null;
+        myclient=null;
+        mysession=null;
+        studentPlayActivity=null;
+        interstitial_wait=null;
+        base_received=false;
+        infected_status=false;
+//        initial_infected_user_ids.clear();
+//        playerInfo.clear();
+//        playerMinors.clear();
+//        infected_status_by_player.clear();
+//        active_players.clear();
+//        touchDict.clear();
+//        historyList.clear();
+//        lastSend.clear();
+//        rangedBeacons.clear();
+    }
 
     public static void logUsernameToDisplay(final String line) {
         if (username.equals(TEACHER_NAME)) {

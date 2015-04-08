@@ -13,10 +13,16 @@ import edu.umich.imlc.collabrify.client.CollabrifyClient;
 
 public class MainActivity extends Activity {
 
+    public void clearGlobals(){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Globals.clear();
     }
 
     @Override
@@ -48,7 +54,7 @@ public class MainActivity extends Activity {
         String username = editText.getText().toString();
 
         try {
-            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username,  "imlcteam@gmail.com", "2468", false);
+            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username, Globals.login_email, Globals.login_id, false);
             Globals.myclient.setSessionListener(Globals.model);
         }
         catch (Exception a) {

@@ -1,5 +1,7 @@
 package edu.umich.eecs.cooties;
 
+import android.widget.Toast;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -35,7 +37,10 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     @Override
     public void onReceiveEvent(CollabrifyEvent event) {
 
-        System.out.println("Receiving Collabrify event in GameState:" +event.type());
+
+        System.out.println("Leave Session");
+
+        System.out.println("Receiving Collabrify event in GameState:" + event.type());
         String eventType = event.type();
         byte[] data = event.data();
         System.out.println("@@@event received " + eventType);
@@ -207,7 +212,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     void touchEventHelper(TouchMessage msg){
         CheckTouch checkTouch = new CheckTouch();
 
-        //obtain corresponding messages already received with same users during approximate time
+
+            //obtain corresponding messages already received with same users during approximate time
         ArrayList<TouchMessage> foundEvents = checkTouch.bumpEvents(msg);
 
         if(foundEvents.size() > 0) {
