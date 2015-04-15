@@ -14,6 +14,8 @@
         android:theme="@style/AppTheme" >
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".MainActivity"
             android:label="@string/app_name" >
@@ -24,48 +26,64 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_1_Initialize"
             android:label="@string/title_activity_teacher_initialze" >
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".StudentJoinActivity"
             android:label="@string/title_activity_student_join" >
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".StudentPlayActivity"
             android:label="@string/title_activity_student_play" >
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_4_Student_List"
             android:label="@string/title_activity_teacher_activity__list" >
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_2_Pre_Lobby"
             android:label="@string/title_activity_teacher_activity__lobby" >
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_3_In_Game_Lobby"
             android:label="@string/title_activity_teacher_activity__in__game__lobby" >
         </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_5_History"
             android:label="@string/title_activity_teacher_activity__history" >
          </activity>
         <activity
             android:screenOrientation="portrait"
+               android:configChanges="orientation|keyboardHidden">
+
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".Student_Intersitital_Activity_2"
             android:label="@string/title_activity_student__intersitital__activity_2" >
