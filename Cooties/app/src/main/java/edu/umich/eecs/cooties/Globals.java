@@ -44,7 +44,7 @@ public class Globals {
 //MESSAGE STUFF
 
     //BASEFILE ATTRIBUTES STUFF-------------------------------------------------------------------
-    public static ArrayList<Long> initial_infected_user_ids;
+    public static ArrayList<Long> initial_infected_user_ids = new ArrayList<Long>();
     public static long incubation_time = 0;
     public static long hide_health_status = 1;
     public static Boolean infected_status = false;

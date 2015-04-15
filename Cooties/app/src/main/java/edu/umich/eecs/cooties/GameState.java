@@ -52,9 +52,14 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
             Globals.major = msg.ibeaconMajor;
 
             //may need to do deep copy instead of reference
-            Globals.initial_infected_user_ids = msg.infectedUserId;
+
+            for (Long a : msg.infectedUserId){
+                Globals.initial_infected_user_ids.add(a);
+            }
+//            Globals.initial_infected_user_ids = msg.infectedUserId;
             Globals.incubation_time = msg.incubationTime;
             Globals.hide_health_status = msg.hideHealthStatus;
+
 
             if(Globals.initial_infected_user_ids.contains(Globals.selfId)){
                 Globals.infected_status = true;
