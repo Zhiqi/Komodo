@@ -25,7 +25,7 @@ public class TeacherActivity_1_Initialize extends Activity implements Collabrify
         {
             public void run()
             {
-                Toast.makeText(getApplicationContext(), "Entered as Teacher: "+ Globals.username, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Entered as Teacher: "+ GlobalSingleton.getInstance().username, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -40,7 +40,7 @@ public class TeacherActivity_1_Initialize extends Activity implements Collabrify
 
         try {
             //System.out.println("Placeholder for create session");
-            Globals.myclient.createSession(sessionName,Globals.tags,null,0,false,this);
+            GlobalSingleton.getInstance().myclient.createSession(sessionName, GlobalSingleton.tags,null,0,false,this);
 
         }
         catch(Exception a){
@@ -53,9 +53,9 @@ public class TeacherActivity_1_Initialize extends Activity implements Collabrify
     //session confirm callback which will trigger next activity
     @Override
     public void onSessionCreated(final CollabrifySession session){
-        Globals.mysession = session;
-        Globals.selfId = session.owner().getId();
-        System.out.println("@@@session created with id " + Globals.mysession.id());
+        GlobalSingleton.getInstance().mysession = session;
+        GlobalSingleton.getInstance().selfId = session.owner().getId();
+        System.out.println("@@@session created with id " + GlobalSingleton.getInstance().mysession.id());
         Intent intent = new Intent(this, TeacherActivity_2_Pre_Lobby.class);
         startActivity(intent);
         finish();

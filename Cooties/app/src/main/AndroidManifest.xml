@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".MainActivity"
@@ -26,7 +26,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_1_Initialize"
@@ -34,7 +34,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".StudentJoinActivity"
@@ -42,7 +42,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".StudentPlayActivity"
@@ -50,7 +50,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_4_Student_List"
@@ -58,7 +58,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_2_Pre_Lobby"
@@ -66,7 +66,7 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_3_In_Game_Lobby"
@@ -74,15 +74,15 @@
         </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".TeacherActivity_5_History"
             android:label="@string/title_activity_teacher_activity__history" >
-         </activity>
+        </activity>
         <activity
             android:screenOrientation="portrait"
-               android:configChanges="orientation|keyboardHidden">
+            android:configChanges="orientation|keyboardHidden"
 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".Student_Intersitital_Activity_2"

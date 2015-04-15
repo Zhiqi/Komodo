@@ -15,7 +15,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import org.altbeacon.beacon.Beacon;
@@ -49,13 +48,13 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_play);
-        Globals.studentPlayActivity = this;
+        GlobalSingleton.getInstance().studentPlayActivity = this;
 
         FragmentManager fm = getFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.spFragment);
         if (fragment == null) {
 
-            if(Globals.infected_status){
+            if(GlobalSingleton.getInstance().infected_status){
                 fragment = new StudentPlayFragment_Infected();
             }
             else{
@@ -197,8 +196,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
         });
         try {
 
-            Identifier uuid = Identifier.parse(Globals.bt_uuid.toString());
-            Identifier maj = Identifier.fromInt(Globals.major);
+            Identifier uuid = Identifier.parse(GlobalSingleton.bt_uuid.toString());
+            Identifier maj = Identifier.fromInt(GlobalSingleton.getInstance().major);
             Identifier min = Identifier.fromInt(Integer.parseInt(minor));
             Log.d("SPA", "Beacon Service Beacon Range ");
             Log.d("SPA", "uuid is "+uuid.toUuidString());
@@ -217,7 +216,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
     public void startBLE(View view) {
 
         //Verify receipt of basemsg
-        if(Globals.major == 0){
+        if(GlobalSingleton.getInstance().major == 0){
             Toast.makeText(getApplicationContext(), "FAIL! \nHaven't received basefile yet", Toast.LENGTH_LONG).show();
             return;
         }
@@ -235,8 +234,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
-                    .setId1(Globals.bt_uuid.toString())
-                    .setId2(String.valueOf(Globals.major))
+                    .setId1(GlobalSingleton.bt_uuid.toString())
+                    .setId2(String.valueOf(GlobalSingleton.getInstance().major))
                     .setId3(minor)
                     .setManufacturer(0x4c00)
                     .setTxPower(-59)
@@ -286,7 +285,7 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
     public void startBLE() {
 
         //Verify receipt of basemsg
-        if(Globals.major == 0){
+        if(GlobalSingleton.getInstance().major == 0){
             Toast.makeText(getApplicationContext(), "FAIL! \nHaven't received basefile yet", Toast.LENGTH_LONG).show();
 
             return;
@@ -305,8 +304,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
             //Toast.makeText(getApplicationContext(), "Beacon Supported\n Starting Transmission", Toast.LENGTH_SHORT).show();
             System.out.println("transmit iBeacon");
             Beacon beacon = new Beacon.Builder()
-                    .setId1(Globals.bt_uuid.toString())
-                    .setId2(String.valueOf(Globals.major))
+                    .setId1(GlobalSingleton.bt_uuid.toString())
+                    .setId2(String.valueOf(GlobalSingleton.getInstance().major))
                     .setId3(minor)
                     .setManufacturer(0x4c00)
                     .setTxPower(-59)
@@ -383,8 +382,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
 
     public void leaveSession(View view) {
         try {
-            Globals.myclient.leaveSession(false, this);
-            Globals.mysession = null;
+            GlobalSingleton.getInstance().myclient.leaveSession(false, this);
+            GlobalSingleton.getInstance().mysession = null;
             endBLE(view);
         }
         catch(Exception e) {
@@ -394,8 +393,8 @@ public class StudentPlayActivity extends Activity implements BeaconConsumer, Col
 
     public void leaveSession() {
         try {
-            Globals.myclient.leaveSession(false, this);
-            Globals.mysession = null;
+            GlobalSingleton.getInstance().myclient.leaveSession(false, this);
+            GlobalSingleton.getInstance().mysession = null;
             endBLE();
         }
         catch(Exception e) {

@@ -91,7 +91,7 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
         setContentView(R.layout.activity_teacher_2);
 
         TextView tv = (TextView) findViewById(R.id.textView2);
-        tv.setText("Session Name: "+Globals.mysession.name());
+        tv.setText("Session Name: "+ GlobalSingleton.getInstance().mysession.name());
 
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -127,12 +127,12 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
         ArrayList<String> names = new ArrayList<String>();
 
         //may need to change to only students who've received annouce mesg for later on - currently uses active participants
-        final ArrayList<CollabrifyParticipant> participants = new ArrayList(Globals.mysession.participants());
+        final ArrayList<CollabrifyParticipant> participants = new ArrayList(GlobalSingleton.getInstance().mysession.participants());
 
         for (int i = 0; i<participants.size(); i++){
 
             //remove teacher
-            if(participants.get(i).getId() == Globals.myclient.currentSessionParticipantId()){
+            if(participants.get(i).getId() == GlobalSingleton.getInstance().myclient.currentSessionParticipantId()){
                 participants.remove(i);
                 break;
             }
@@ -224,9 +224,9 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
         }
 
         //determine major based on gamesession -> send as int
-        Globals.major = (int)(Globals.mysession.id() % Short.MAX_VALUE);
-        if(Globals.major == 0){
-            Globals.major += 1;
+        GlobalSingleton.getInstance().major = (int)(GlobalSingleton.getInstance().mysession.id() % Short.MAX_VALUE);
+        if(GlobalSingleton.getInstance().major == 0){
+            GlobalSingleton.getInstance().major += 1;
         }
 
 
@@ -235,14 +235,14 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
 
         //not currently working
         try{
-            msg.initWithInfectedUser(infected_users_list,incubation_time,Globals.major,hide_health);
+            msg.initWithInfectedUser(infected_users_list,incubation_time, GlobalSingleton.getInstance().major,hide_health);
         }
         catch(Exception e){
             Log.e(TAG, "initializing base msg",e);
         }
 
 
-        Globals.myclient.broadcast(msg.outputBuffer(), "initialSettings", Globals.model);
+        GlobalSingleton.getInstance().myclient.broadcast(msg.outputBuffer(), "initialSettings", GlobalSingleton.getInstance().model);
 
         Intent intent = new Intent(this, TeacherActivity_3_In_Game_Lobby.class);
         startActivity(intent);
@@ -258,8 +258,8 @@ public class TeacherActivity_2_Pre_Lobby extends Activity implements AdapterView
     //callback is onDisconnect
     public void end_Session(){
         try{
-            Globals.myclient.leaveSession(true, this);
-            Globals.mysession = null;
+            GlobalSingleton.getInstance().myclient.leaveSession(true, this);
+            GlobalSingleton.getInstance().mysession = null;
 
         }
         catch(Exception e){

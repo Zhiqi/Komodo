@@ -1,7 +1,5 @@
 package edu.umich.eecs.cooties;
 
-import android.widget.Toast;
-
 import java.io.File;
 import java.util.ArrayList;
 
@@ -13,7 +11,7 @@ import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
 /**
  * Created by mtkliema on 3/10/15.
  * Serves as Collabrify Callback
- * Accessed through Globals.model
+ * Accessed through GlobalSingleton.model
  */
 public class GameState implements CollabrifyListener.CollabrifySessionListener, CollabrifyListener.CollabrifyBroadcastListener {
 
@@ -49,24 +47,24 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
             BaseFileMessage msg = new BaseFileMessage();
             msg.initWithBuffer(data);
 
-            Globals.major = msg.ibeaconMajor;
+            GlobalSingleton.getInstance().major = msg.ibeaconMajor;
 
             //may need to do deep copy instead of reference
 
             for (Long a : msg.infectedUserId){
-                Globals.initial_infected_user_ids.add(a);
+                GlobalSingleton.getInstance().initial_infected_user_ids.add(a);
             }
-//            Globals.initial_infected_user_ids = msg.infectedUserId;
-            Globals.incubation_time = msg.incubationTime;
-            Globals.hide_health_status = msg.hideHealthStatus;
+//            GlobalSingleton.initial_infected_user_ids = msg.infectedUserId;
+            GlobalSingleton.getInstance().incubation_time = msg.incubationTime;
+            GlobalSingleton.getInstance().hide_health_status = msg.hideHealthStatus;
 
 
-            if(Globals.initial_infected_user_ids.contains(Globals.selfId)){
-                Globals.infected_status = true;
+            if(GlobalSingleton.getInstance().initial_infected_user_ids.contains(GlobalSingleton.getInstance().selfId)){
+                GlobalSingleton.getInstance().infected_status = true;
             }
 
-            for(Long a : Globals.initial_infected_user_ids){
-                Globals.infected_status_by_player.put(a, true);
+            for(Long a : GlobalSingleton.getInstance().initial_infected_user_ids){
+                GlobalSingleton.getInstance().infected_status_by_player.put(a, true);
                 System.out.println("Initial Infected User ID "+a);
 
             }
@@ -75,15 +73,15 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
 
             System.out.println("Received Basefile  Message");
-            System.out.println("Major is "+Globals.major);
-            System.out.println("Incubation Time is "+ Globals.incubation_time);
-            System.out.println("Hide health status is "+Globals.hide_health_status);
+            System.out.println("Major is "+ GlobalSingleton.getInstance().major);
+            System.out.println("Incubation Time is "+ GlobalSingleton.getInstance().incubation_time);
+            System.out.println("Hide health status is "+ GlobalSingleton.getInstance().hide_health_status);
 
-            Globals.base_received = true;
+            GlobalSingleton.getInstance().base_received = true;
 
-            if(Globals.interstitial_wait != null)
+            if(GlobalSingleton.getInstance().interstitial_wait != null)
             {
-                Globals.interstitial_wait.lets_go();
+                GlobalSingleton.getInstance().interstitial_wait.lets_go();
             }
 
             // Set beacon majorsaq
@@ -100,7 +98,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
             acquiredNewParticipant(msg);
             /*
-            if(msg.user_id == Globals.selfId) {
+            if(msg.user_id == GlobalSingleton.selfId) {
                 System.out.println("self detected");
                 // check if beacon is turned on
                 //gameStarted = [self turnOnBeacons];
@@ -131,8 +129,8 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
         }
         else if(eventType.equals("StopSim")) {
             //disable beacons
-            if (!Globals.username.equals(Globals.TEACHER_NAME))
-                Globals.studentPlayActivity.leaveSession();
+            if (!GlobalSingleton.getInstance().username.equals(GlobalSingleton.TEACHER_NAME))
+                GlobalSingleton.getInstance().studentPlayActivity.leaveSession();
         }
         else if(eventType.equals("Restart")) {
 
@@ -173,15 +171,15 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     private void acquiredNewParticipant(PlayerAnnounceMessage participant) {
         long playerId = participant.user_id;
         short minor = participant.minor;
-        if(Globals.playerMinors.containsKey(minor) == false) {
-            Globals.playerMinors.put(minor, playerId);
-            Globals.logUsernameToDisplay(participant.displayName);
+        if(GlobalSingleton.getInstance().playerMinors.containsKey(minor) == false) {
+            GlobalSingleton.getInstance().playerMinors.put(minor, playerId);
+//            GlobalSingleton.getInstance().logUsernameToDisplay(participant.displayName);
             PlayerInfo player = new PlayerInfo();
             player.name = participant.displayName;
             player.playerId = playerId;
             player.minor = minor;
             player.left = false;
-            Globals.playerInfo.put(playerId, player);
+            GlobalSingleton.getInstance().playerInfo.put(playerId, player);
             /*
             if([self.delegate respondsToSelector:@selector(participantJoined:)]) {
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -191,15 +189,15 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
             */
         }
 
-        if(Globals.infected_status_by_player.containsKey(playerId)){
+        if(GlobalSingleton.getInstance().infected_status_by_player.containsKey(playerId)){
             //do nothing, key with infection status already in from basemsg
         }
         else{
-            Globals.infected_status_by_player.put(playerId, false);
+            GlobalSingleton.getInstance().infected_status_by_player.put(playerId, false);
         }
         /*
         else {
-            if(playerId  == Globals.selfId) {
+            if(playerId  == GlobalSingleton.selfId) {
                 announcePlayer();
             }
         }
@@ -210,7 +208,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
         final long timeUntilNextAllowedConnectAfterConnect = 30;
 
         //after an event is received, prevent another connection for 30 seconds
-        Globals.lastSend.put(minor, Math.round((double)System.currentTimeMillis()/1000) + timeUntilNextAllowedConnectAfterConnect);
+        GlobalSingleton.getInstance().lastSend.put(minor, Math.round((double)System.currentTimeMillis()/1000) + timeUntilNextAllowedConnectAfterConnect);
     }
 
     //called on receipt of touch msg - finds corresponding events in history
@@ -233,12 +231,12 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
                 PlayerInfo firstPlayer; //self
                 PlayerInfo secondPlayer; //opposite
-                if(msg.sourceUserId == Globals.selfId){
-                    firstPlayer = Globals.playerInfo.get(msg.sourceUserId);
-                    secondPlayer = Globals.playerInfo.get(touch.sourceUserId);
+                if(msg.sourceUserId == GlobalSingleton.getInstance().selfId){
+                    firstPlayer = GlobalSingleton.getInstance().playerInfo.get(msg.sourceUserId);
+                    secondPlayer = GlobalSingleton.getInstance().playerInfo.get(touch.sourceUserId);
                 } else {
-                    firstPlayer = Globals.playerInfo.get(touch.sourceUserId);
-                    secondPlayer = Globals.playerInfo.get(msg.sourceUserId);
+                    firstPlayer = GlobalSingleton.getInstance().playerInfo.get(touch.sourceUserId);
+                    secondPlayer = GlobalSingleton.getInstance().playerInfo.get(msg.sourceUserId);
                     //if(infection == HMCFirstUser) infection = HMCSecondUser;
                     //else if(infection == HMCSecondUser) infection = HMCFirstUser;
                 }
@@ -246,18 +244,18 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
                 if(msg.infected || touch.infected){
 
-                    if(firstPlayer.playerId == Globals.selfId || secondPlayer.playerId == Globals.selfId){
-                        Globals.infected_status = true;
+                    if(firstPlayer.playerId == GlobalSingleton.getInstance().selfId || secondPlayer.playerId == GlobalSingleton.getInstance().selfId){
+                        GlobalSingleton.getInstance().infected_status = true;
 
-                        if(Globals.studentPlayActivity != null){
-                            Globals.studentPlayActivity.showInfected();
+                        if(GlobalSingleton.getInstance().studentPlayActivity != null){
+                            GlobalSingleton.getInstance().studentPlayActivity.showInfected();
                         }
 
 
                     }
 
-                    Globals.infected_status_by_player.put(firstPlayer.playerId, true);
-                    Globals.infected_status_by_player.put(secondPlayer.playerId, true);
+                    GlobalSingleton.getInstance().infected_status_by_player.put(firstPlayer.playerId, true);
+                    GlobalSingleton.getInstance().infected_status_by_player.put(secondPlayer.playerId, true);
                     //update_infection_screen();
                 }
 
@@ -268,20 +266,20 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
 
 
-                if(Globals.historyList.contains(historyItem)) {
+                if(GlobalSingleton.getInstance().historyList.contains(historyItem)) {
                     //History item records how many are created.  If history list already contains it, then subtract
                     historyItem.decrement();
                 }
                 else {
-                    Globals.historyList.add(historyItem);
-                    Globals.logMeetingToDisplay(historyItem.firstUser.name + " and " + historyItem.secondUser.name + " meet at " + historyItem.timestamp);
+                    GlobalSingleton.getInstance().historyList.add(historyItem);
+//                    GlobalSingleton.logMeetingToDisplay(historyItem.firstUser.name + " and " + historyItem.secondUser.name + " meet at " + historyItem.timestamp);
 
 
 
                     //prevent interactions for 30 seconds - may not be accurate if an app joins late and receives a bunch of prior messages
-                    if(msg.sourceUserId == Globals.selfId || touch.sourceUserId == Globals.selfId) {
+                    if(msg.sourceUserId == GlobalSingleton.getInstance().selfId || touch.sourceUserId == GlobalSingleton.getInstance().selfId) {
                         short targetMinor;
-                        if(firstPlayer.playerId == Globals.selfId) {
+                        if(firstPlayer.playerId == GlobalSingleton.getInstance().selfId) {
                             targetMinor = secondPlayer.minor;
                         }
                         else {
@@ -290,7 +288,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
 
                         receivedEventFrom(targetMinor);
                             /*
-                            for (HistoryItem HI : Globals.historyList){
+                            for (HistoryItem HI : GlobalSingleton.historyList){
                                 System.out.println("@@@Player " + HI.firstUser.name + " and Player " + HI.secondUser.name + " meet at " + HI.timestamp);
                             }
                             */
@@ -323,7 +321,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     @Override
     public void onParticipantJoined(CollabrifyParticipant collabrifyParticipant) {
         System.out.println("collabrify participant joined:" + collabrifyParticipant.getDisplayName());
-        Globals.active_players.put(collabrifyParticipant.getId(),collabrifyParticipant.getDisplayName());
+        GlobalSingleton.getInstance().active_players.put(collabrifyParticipant.getId(),collabrifyParticipant.getDisplayName());
         System.out.println("@@@collabrify participant joined:" + collabrifyParticipant.getDisplayName());
 
     }
@@ -331,7 +329,7 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     @Override
     public void onParticipantLeft(CollabrifyParticipant collabrifyParticipant) {
         System.out.println(collabrifyParticipant.getDisplayName() + " has Left!");
-        Globals.active_players.remove(collabrifyParticipant.getId());
+        GlobalSingleton.getInstance().active_players.remove(collabrifyParticipant.getId());
 
     }
 
@@ -355,9 +353,9 @@ public class GameState implements CollabrifyListener.CollabrifySessionListener, 
     // Helper function for print all players in session
     // just for debug
     private void printPlayerList(){
-        System.out.println("@@@number of players in the session is:" + Globals.playerInfo.size());
-        for (long key: Globals.playerInfo.keySet()) {
-            System.out.println(key +":" + Globals.playerInfo.get(key).name +":id is:"+Globals.playerInfo.get(key).playerId);
+        System.out.println("@@@number of players in the session is:" + GlobalSingleton.getInstance().playerInfo.size());
+        for (long key: GlobalSingleton.getInstance().playerInfo.keySet()) {
+            System.out.println(key +":" + GlobalSingleton.getInstance().playerInfo.get(key).name +":id is:"+ GlobalSingleton.getInstance().playerInfo.get(key).playerId);
         }
     }
 

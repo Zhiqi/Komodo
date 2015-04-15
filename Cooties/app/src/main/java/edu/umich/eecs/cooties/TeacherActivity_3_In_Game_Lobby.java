@@ -35,8 +35,8 @@ public class TeacherActivity_3_In_Game_Lobby extends Activity implements Collabr
 
     public void end_Session(){
         try{
-            Globals.myclient.leaveSession(true, this);
-            Globals.mysession = null;
+            GlobalSingleton.getInstance().myclient.leaveSession(true, this);
+            GlobalSingleton.getInstance().mysession = null;
         }
         catch(Exception e){
             Log.e("Teacher_Activity_3", "End Session Exception", e);
@@ -47,7 +47,7 @@ public class TeacherActivity_3_In_Game_Lobby extends Activity implements Collabr
     //go back to session creation
     public void stopSimulation(View view) {
         byte [] msg = new byte[1];
-        Globals.myclient.broadcast(msg, "StopSim", Globals.model);
+        GlobalSingleton.getInstance().myclient.broadcast(msg, "StopSim", GlobalSingleton.getInstance().model);
         end_Session();
     }
 

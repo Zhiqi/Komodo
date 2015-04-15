@@ -25,15 +25,16 @@ public class SearchBeacon {
         final int lengthOfConnection = 1;
         final int timeSinceLastSend = 2;
 
-        long now = Math.round((double)System.currentTimeMillis()/1000);
-        for (Short key : Globals.rangedBeacons.keySet()) {
-            System.out.println("@@@timestamp for device " + key+ " is " +Globals.rangedBeacons.get(key));
 
-            if (now - Globals.rangedBeacons.get(key) > lengthOfConnection) {
+        long now = Math.round((double)System.currentTimeMillis()/1000);
+        for (Short key : GlobalSingleton.getInstance().rangedBeacons.keySet()) {
+            System.out.println("@@@timestamp for device " + key+ " is " + GlobalSingleton.getInstance().rangedBeacons.get(key));
+
+            if (now - GlobalSingleton.getInstance().rangedBeacons.get(key) > lengthOfConnection) {
                 System.out.println("@@@Connection time satisfied");
-                if (Globals.lastSend.get(key) == null || now - Globals.lastSend.get(key) > timeSinceLastSend) {
-                    Globals.lastSend.put(key, now);
-                    Globals.stickyMinor = key;
+                if (GlobalSingleton.getInstance().lastSend.get(key) == null || now - GlobalSingleton.getInstance().lastSend.get(key) > timeSinceLastSend) {
+                    GlobalSingleton.getInstance().lastSend.put(key, now);
+                    GlobalSingleton.getInstance().stickyMinor = key;
                     listener.detectedDevice(key);
                     break;
                 }
@@ -78,7 +79,7 @@ public class SearchBeacon {
             tmpRangedBeacons.put(minor, timestamp);
 
             //if stickyMinor found, then restrict to only sticky minor
-            if(minor == Globals.stickyMinor) {
+            if(minor == GlobalSingleton.getInstance().stickyMinor) {
                 tmpRangedBeacons = new Hashtable<Short, Long>();
                 tmpRangedBeacons.put(minor, timestamp);
                 sticked = true;
@@ -89,25 +90,30 @@ public class SearchBeacon {
 
 
         //store oldest ranged beacon timestamps in rangedBeacons, but only save those beacons found in current ranging
-        Hashtable<Short, Long> prevRangedBeacons = (Hashtable<Short, Long>)Globals.rangedBeacons.clone();
-        Globals.rangedBeacons = new Hashtable<Short, Long>();
+        Hashtable<Short, Long> prevRangedBeacons = (Hashtable<Short, Long>) GlobalSingleton.getInstance().rangedBeacons.clone();
+//        GlobalSingleton.getInstance().rangedBeacons = new Hashtable<Short, Long>();
+
+        if(GlobalSingleton.getInstance().rangedBeacons.isEmpty() == false){
+            GlobalSingleton.getInstance().rangedBeacons.clear();
+
+        }
         for (Short key : tmpRangedBeacons.keySet()){
             if (prevRangedBeacons.containsKey(key)){
-                Globals.rangedBeacons.put(key, prevRangedBeacons.get(key));
+                GlobalSingleton.getInstance().rangedBeacons.put(key, prevRangedBeacons.get(key));
             }
             else{
-                Globals.rangedBeacons.put(key, tmpRangedBeacons.get(key));
+                GlobalSingleton.getInstance().rangedBeacons.put(key, tmpRangedBeacons.get(key));
             }
         }
         //System.out.println("@@@break point 2 ");
 
         //if devices go out of range and come back into range, allow sending
         if(!sticked) {
-            Globals.stickyMinor = -1;
+            GlobalSingleton.getInstance().stickyMinor = -1;
 
             for (Short key : prevRangedBeacons.keySet()){
-                if (!Globals.rangedBeacons.containsKey(key)){
-                    Globals.lastSend.remove(key);
+                if (!GlobalSingleton.getInstance().rangedBeacons.containsKey(key)){
+                    GlobalSingleton.getInstance().lastSend.remove(key);
                 }
             }
         }

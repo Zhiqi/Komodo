@@ -22,7 +22,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Globals.clear();
+        GlobalSingleton.getInstance().resetInstance();
     }
 
     @Override
@@ -54,21 +54,21 @@ public class MainActivity extends Activity {
         String username = editText.getText().toString();
 
         try {
-            Globals.myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username, Globals.login_email, Globals.login_id, false);
-            Globals.myclient.setSessionListener(Globals.model);
+            GlobalSingleton.getInstance().myclient = CollabrifyClient.newClient(getApplicationContext(), "NO@EMAIL.com", username, GlobalSingleton.login_email, GlobalSingleton.login_id, false);
+            GlobalSingleton.getInstance().myclient.setSessionListener(GlobalSingleton.getInstance().model);
         }
         catch (Exception a) {
             Log.e("new Client", "new Collabrify Client Error");
         }
 
-        if (username.equals(Globals.TEACHER_NAME)) {
+        if (username.equals(GlobalSingleton.TEACHER_NAME)) {
             intent = new Intent(this, TeacherActivity_1_Initialize.class);
         }
         else {
             intent = new Intent(this, StudentJoinActivity.class);
         }
 
-        Globals.username = username;
+        GlobalSingleton.getInstance().username = username;
         startActivity(intent);
         finish();
     }

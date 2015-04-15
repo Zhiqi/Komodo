@@ -19,7 +19,7 @@ public class CheckTouch {
         // Find valid touch message
         for(int i = -timeSpanAllowed; i < timeSpanAllowed + 1; ++i) {
             long num = msg.timestamp + i;
-            ArrayList<TouchMessage> search = Globals.touchDict.get(num);
+            ArrayList<TouchMessage> search = GlobalSingleton.getInstance().touchDict.get(num);
             if(search != null) {
                 //test if any collected touches are in the current touch and vice versa
                 for(TouchMessage touch : search) {
@@ -45,10 +45,10 @@ public class CheckTouch {
     }
 
     void addTouch(TouchMessage msg){
-        ArrayList<TouchMessage> array = Globals.touchDict.get(msg.timestamp);
+        ArrayList<TouchMessage> array = GlobalSingleton.getInstance().touchDict.get(msg.timestamp);
         if(array == null) {
             array = new ArrayList();
-            Globals.touchDict.put(msg.timestamp, array);
+            GlobalSingleton.getInstance().touchDict.put(msg.timestamp, array);
         }
         array.add(msg);
     }

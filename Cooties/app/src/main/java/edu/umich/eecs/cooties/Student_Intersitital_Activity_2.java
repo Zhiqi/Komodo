@@ -14,11 +14,11 @@ public class Student_Intersitital_Activity_2 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student__intersitital__activity_2);
 
-        if(Globals.base_received){
+        if(GlobalSingleton.getInstance().base_received){
             lets_go();
         }
         else{
-            Globals.interstitial_wait = this;
+            GlobalSingleton.getInstance().interstitial_wait = this;
         }
 
 

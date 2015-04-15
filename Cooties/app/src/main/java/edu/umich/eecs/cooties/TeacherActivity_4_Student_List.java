@@ -26,25 +26,25 @@ public class TeacherActivity_4_Student_List extends Activity {
 
         players_list = (ListView)findViewById(R.id.listView);
 
-        if(Globals.playerInfo.isEmpty()){
+        if(GlobalSingleton.getInstance().playerInfo.isEmpty()){
             active_players.add("No Playerinfo Received");
 
         }
         else{
-            for(Long a : Globals.playerInfo.keySet()){
+            for(Long a : GlobalSingleton.getInstance().playerInfo.keySet()){
 
 
-                if(Globals.infected_status_by_player.get(a) == true){
-                    active_players.add(Globals.playerInfo.get(a).name + ":\tINFECTED");
+                if(GlobalSingleton.getInstance().infected_status_by_player.get(a) == true){
+                    active_players.add(GlobalSingleton.getInstance().playerInfo.get(a).name + ":\tINFECTED");
                 }
                 else{
-                    active_players.add(Globals.playerInfo.get(a).name+":\tNOT INFECTED");
+                    active_players.add(GlobalSingleton.getInstance().playerInfo.get(a).name+":\tNOT INFECTED");
                 }
             }
 
         }
-        Toast.makeText(getApplicationContext(), "Found " + Globals.playerInfo.size() + " students", Toast.LENGTH_LONG ).show();
-        System.out.println("Found " + Globals.playerInfo.size() + " students");
+        Toast.makeText(getApplicationContext(), "Found " + GlobalSingleton.getInstance().playerInfo.size() + " students", Toast.LENGTH_LONG ).show();
+        System.out.println("Found " + GlobalSingleton.getInstance().playerInfo.size() + " students");
         ArrayAdapter<String> active_players_adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, active_players);
         players_list.setAdapter(active_players_adapter);
 

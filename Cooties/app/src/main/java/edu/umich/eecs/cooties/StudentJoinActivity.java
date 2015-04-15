@@ -27,7 +27,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         setContentView(R.layout.activity_student_join);
 
         try{
-            Globals.myclient.requestSessionList(Globals.tags, this);
+            GlobalSingleton.getInstance().myclient.requestSessionList(GlobalSingleton.tags, this);
         }
         catch(Exception e){
 
@@ -66,7 +66,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
         System.out.println("Receiving Session List in Student Activity");
         if( sessionList.isEmpty())
         {
-            System.out.println("No Session Available using Tags"+ Globals.tags.get(0));
+            System.out.println("No Session Available using Tags"+ GlobalSingleton.tags.get(0));
 //            Log.i("CCO", "No Session Available using Tags: " + clientListener.tags.get(0));...........
 //            runOnUiThread(new Runnable()
 //            {
@@ -98,7 +98,7 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
                         try {
                             sessionId = sessionList.get(which).id();
                             sessionName = sessionList.get(which).name();
-                            Globals.myclient.joinSession(sessionId, null, StudentJoinActivity.this);
+                            GlobalSingleton.getInstance().myclient.joinSession(sessionId, null, StudentJoinActivity.this);
                         } catch (Exception e) {
                             System.out.println( "session not joined");
                             Log.i("CCO", "Join Session Failed", e);
@@ -132,9 +132,9 @@ public class StudentJoinActivity extends Activity implements CollabrifyListener.
 
     @Override
     public void onSessionJoined(CollabrifySession collabrifySession) {
-        // After join the session successfully, set some variables in Globals
-        Globals.mysession = collabrifySession;
-        Globals.selfId = Globals.myclient.currentSessionParticipantId();
+        // After join the session successfully, set some variables in GlobalSingleton
+        GlobalSingleton.getInstance().mysession = collabrifySession;
+        GlobalSingleton.getInstance().selfId = GlobalSingleton.getInstance().myclient.currentSessionParticipantId();
         Intent intent = new Intent(this, Student_Intersitital_Activity_2.class);
 
         startActivity(intent);

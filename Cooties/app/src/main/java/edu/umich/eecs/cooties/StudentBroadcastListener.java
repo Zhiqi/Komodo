@@ -2,8 +2,6 @@ package edu.umich.eecs.cooties;
 
 import android.util.Log;
 
-import edu.umich.eecs.cooties.PlayerAnnounceMessage;
-import edu.umich.eecs.cooties.Globals;
 import edu.umich.imlc.collabrify.client.CollabrifyListener;
 import edu.umich.imlc.collabrify.client.CollabrifyEvent;
 import edu.umich.imlc.collabrify.client.exceptions.CollabrifyException;
@@ -46,11 +44,11 @@ public class StudentBroadcastListener {
     // return a minor value which will be used for beacon creation
     public String announcePlayer() {
         System.out.println("@@@@Announce player");
-        long playerId = Globals.selfId;
+        long playerId = GlobalSingleton.getInstance().selfId;
         short minor = newMinor(playerId);
         // Create an object for PlayAnnounce message
         PlayerAnnounceMessage msg = new PlayerAnnounceMessage();
-        msg.initWithInfectedUser(playerId, minor, Globals.username);
+        msg.initWithInfectedUser(playerId, minor, GlobalSingleton.getInstance().username);
         // broadcast the message
         broadcast(msg.outputBuffer(), "PlayerAnnounce");
         return String.valueOf(minor);
@@ -59,14 +57,14 @@ public class StudentBroadcastListener {
     // broadcast the message
     private void broadcast(byte[] data, String eventType){
         //System.out.println("@@@Attempt to broadcast");
-        Globals.myclient.broadcast(data, eventType, listen);
+        GlobalSingleton.getInstance().myclient.broadcast(data, eventType, listen);
     }
 
     //called by announceplayer -> returned to StudentPlayActivity:onCreate for setting up bluetooth beacon
     // create a new minor for beacon
     private short newMinor(long playerId) {
         short minor = (short)(playerId % Short.MAX_VALUE);
-        while(Globals.playerMinors.containsKey(minor) == true) {
+        while(GlobalSingleton.getInstance().playerMinors.containsKey(minor) == true) {
             if(minor == Short.MAX_VALUE - 1){
                 minor = 0;
             }
@@ -83,7 +81,7 @@ public class StudentBroadcastListener {
         boolean inIncubation = incubationTimer > 0 && !incubationCompleted;
         long timestamp = Math.round((double)System.currentTimeMillis() /1000);
         TouchMessage msg =  new TouchMessage();
-        msg.initWithInfected(Globals.infected_status, inIncubation, Globals.selfId, Globals.playerMinors.get(minor), timestamp);
+        msg.initWithInfected(GlobalSingleton.getInstance().infected_status, inIncubation, GlobalSingleton.getInstance().selfId, GlobalSingleton.getInstance().playerMinors.get(minor), timestamp);
         broadcast(msg.outputBuffer(), "Touch");
 
         /*
